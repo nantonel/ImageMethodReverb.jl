@@ -1,7 +1,7 @@
 include("ism.jl")
 
 # testing output of this implementation with the one 
-# of Enzo de Sena: 
+# of Enzo de Sena: http://www.desena.org/sweep/ 
 
 
 c  = 343           # Speed of sound
