@@ -25,8 +25,8 @@ Outputs: h  impuse response
 	if(length(β) == 1)  # T60 is in input and is converted to β 
 		S = 2*( L[1]*L[2]+L[1]*L[3]+L[2]*L[3] ) # Total surface area
 		V = prod(L)
-		α = 0.163*V/(β*S) # Absorption coefficient
-		β =-sqrt(1-α).*ones(6) # Reflection coefficient
+		α = -10^(-0.161*V/(β*S))+1 # Absorption coefficient
+		β =-sqrt(abs(1-α)).*ones(6) # Reflection coefficient
 	end
 
 	L  =  L./c*Fs*2  #convert dimensions to indices
