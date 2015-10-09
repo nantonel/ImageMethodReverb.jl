@@ -1,4 +1,4 @@
-function ISM(xr,xs,L,β,N,Nt,Rd,Nr,Tw,Fc,Fs,c)
+function ISM(xr,xs,L,β,N,Nt,Rd,Sr,Tw,Fc,Fs,c)
 #=
 Image Source Method simulator
 
@@ -11,15 +11,14 @@ Inputs: xr microphone positions (in meters) (3 element array)
 	   (set to [0,0,0] to compute full order)
 	Nt samples of impulse response
 	Rd random displacement (in meters)
-	Nr Randomized displacement to apply to each source
-	   (in samples)
+	Sr seed of the random sequence
 	   (set 0 if you want to compute a new one)
         Tw samples of low frequency filter
 	Fc cutoff frequency of LF filter
 	Fs Sampling Frequency
 	c  Speed of sound
 Outputs: h  impuse response
-         Nr randomized displacement vector
+         Sr randomized displacement vector
 	 (to be used if multiple IR are needed)
 =#
 	if(length(β) == 1)  # T60 is in input and is converted to β 
@@ -44,49 +43,51 @@ Outputs: h  impuse response
 		N = ifloor(Nt./L)+1  # compute full order
 	end
 
-	if(Nr == 0) # compute new randomization of image sources
-	Nr = Rd.*(randn((2*N[1]+1)*(2*N[2]+1)*(2*N[3]+1)*2*2*2))
-	Nr[iceil(((2*N[1]+1)*(2*N[2]+1)*(2*N[3]+1))/2  ) ] = 0 
-	# direct path, no displacement is applied 
+	if(Sr == 0) # compute new randomization of image sources
+	Sr = ccall( (:clock, "libc"), Int32, ()) #obtain a new seed from clock
         end
+
 
 	for k = 1:K
-	ii = 0 # counter used by Nr
-	for u = 0:1, v = 0:1, w = 0:1
-		for l = -N[1]:N[1], m = -N[2]:N[2], n = -N[3]:N[3]
-		
-			ii = ii+1
-			d =(norm([(2*u-1)*xs[1]+xr[1,k]-l*L[1],
-		                  (2*v-1)*xs[2]+xr[2,k]-m*L[2],
-		                  (2*w-1)*xs[3]+xr[3,k]-n*L[3]])+1+
-			          Nr[ii]) #random displacement
-				  # compute distance
-
-				  if(iround(d)>Nt || iround(d)<1)
-					  #if index not exceed length h
-					  continue
-				  end
-
-				  if(Tw == 0)
-				  indx = iround(d) #calculate index  
-				  s = 1
-				  else
-				  indx = maximum([iceil(d-Tw/2),1]):minimum([floor(d+Tw/2),Nt])
-				  # create time window
-
-				  s = (1+cos(2*π*(indx-d)/Tw)).*sinc(Fc*(indx-d))/2
-				  # compute filtered impulse
-				  end
 	
-		        A = prod(β.^abs([l-u,l,m-v,m,n-w,n]))/(4*π*(d-1))
+		srand(Sr)
+		for u = 0:1, v = 0:1, w = 0:1
+			for l = -N[1]:N[1], m = -N[2]:N[2], n = -N[3]:N[3]
+	
+				# compute distance
+				d =(norm([(2*u-1)*xs[1]+xr[1,k]-l*L[1],
+				(2*v-1)*xs[2]+xr[2,k]-m*L[2],
+				(2*w-1)*xs[3]+xr[3,k]-n*L[3]]
+				+Rd*(2*rand(3)-1)*norm(sum(abs([u,v,w,l,m,n])),0)) #random displacement
+				+1) # when norm(sum(abs( [u,v,w,l,m,n])),0) == 0 we have direct path, so
+				    # no displacement is added
+	
+				# instead of moving the source on a line
+				# as in the paper, we are moving the source 
+				# in a cube with 2*Rd edge
 
-			h[indx,k] = h[indx,k] + s.*A
+				if(iround(d)>Nt || iround(d)<1)
+					#if index not exceed length h
+					continue
+				end
 
+				if(Tw == 0)
+					indx = iround(d) #calculate index  
+					s = 1
+				else
+					indx = maximum([iceil(d-Tw/2),1]):minimum([floor(d+Tw/2),Nt])
+					# create time window
+					s = (1+cos(2*π*(indx-d)/Tw)).*sinc(Fc*(indx-d))/2
+					# compute filtered impulse
+				end
+	
+				A = prod(β.^abs([l-u,l,m-v,m,n-w,n]))/(4*π*(d-1))
+				h[indx,k] = h[indx,k] + s.*A
+			end
 		end
 	end
-        end
 
-return h, Nr
+return h, Sr
 
 end
 
