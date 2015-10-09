@@ -8,3 +8,6 @@ Language Processing, vol. 21, no. 4, April 2015.
 
 A MATLAB implementation of the RIM can be found in:
 http://www.desena.org/sweep/
+
+Notice that instead of moving the source on a line as in the paper, here we are moving the source 
+in a cube with (2 Rd) edge.
