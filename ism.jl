@@ -40,7 +40,7 @@ Outputs: h  impuse response
 
 
 	if(N == [0,0,0])
-		N = ifloor(Nt./L)+1  # compute full order
+		N = floor(Int64,Nt./L)+1  # compute full order
 	end
 
 	if(Sr == 0) # compute new randomization of image sources
@@ -58,24 +58,28 @@ Outputs: h  impuse response
 				d =(norm([(2*u-1)*xs[1]+xr[1,k]-l*L[1],
 				(2*v-1)*xs[2]+xr[2,k]-m*L[2],
 				(2*w-1)*xs[3]+xr[3,k]-n*L[3]]
-				+Rd*(2*rand(3)-1)*norm(sum(abs([u,v,w,l,m,n])),0)) #random displacement
-				+1) # when norm(sum(abs( [u,v,w,l,m,n])),0) == 0 we have direct path, so
-				    # no displacement is added
+				+Rd*(2*rand(3)-1)*norm(sum(abs([u,v,w,l,m,n])),0)) 
+				+1) #random displacement
+				# when norm(sum(abs( [u,v,w,l,m,n])),0) == 0 
+				# we have direct path, so
+				# no displacement is added
 	
 				# instead of moving the source on a line
 				# as in the paper, we are moving the source 
 				# in a cube with 2*Rd edge
 
-				if(iround(d)>Nt || iround(d)<1)
+				if(round(Int64,d)>Nt || round(Int64,d)<1)
 					#if index not exceed length h
 					continue
 				end
 
 				if(Tw == 0)
-					indx = iround(d) #calculate index  
+					indx = round(Int64,d) #calculate index  
 					s = 1
 				else
-					indx = maximum([iceil(d-Tw/2),1]):minimum([floor(d+Tw/2),Nt])
+					indx = (
+				maximum([ceil(Int64,d-Tw/2),1]):minimum([floor(Int64,d+Tw/2),Nt])
+				               )
 					# create time window
 					s = (1+cos(2*π*(indx-d)/Tw)).*sinc(Fc*(indx-d))/2
 					# compute filtered impulse
