@@ -6,7 +6,7 @@ include("ism.jl")
 
 c  = 343           # Speed of sound
 Fs = 4E4           # Sampling frequency
-Nt = iround(4E4)   # Number of time samples
+Nt = round(Int64,4E4)   # Number of time samples
 xs = [2,1.5,1]     # Source position
 xr = [1,2,2]       # Receiver position
 L  = [4,4,4]       # Room dimensions
@@ -33,5 +33,5 @@ close(file)
 
 using PyPlot
 figure()
-plot(h)
-plot(hm)
+plot(h./maximum(abs(h)))
+plot(hm./maximum(abs(hm)))

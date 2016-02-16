@@ -91,7 +91,7 @@ Outputs: h  impuse response
 		end
 	end
 
-return h, Sr
+return h.*(Fs/c), Sr
 
 end
 
