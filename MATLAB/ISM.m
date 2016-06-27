@@ -1,0 +1,107 @@
+function [h,Sr] =  ISM(xr,xs,L,beta,N,Nt,Rd,Sr,Tw,Fc,Fs,c)
+
+% Image Source Method simulator
+% 
+% Inputs: xr microphone positions (in meters) (3 element array)
+%         xs source position (in meters)
+% 	L  room dimension (in meters)
+% 	beta  absorption coefficient (6 element array)
+%            or T60 if 1 element array 
+% 	N  order of reflections 
+% 	   (set to [0,0,0] to compute full order)
+% 	Nt samples of impulse response
+% 	Rd random displacement (in meters)
+% 	Sr seed of the random sequence
+% 	   (set 0 if you want to compute a new one)
+%         Tw samples of low frequency filter
+% 	Fc cutoff frequency of LF filter
+% 	Fs Sampling Frequency
+% 	c  Speed of sound
+% Outputs: h  impuse response
+%          Sr randomized displacement vector
+% 	 (to be used if multiple IR are needed)
+
+	if(length(beta) == 1)  % T60 is in input and is converted to β 
+		S = 2*( L(1)*L(2)+L(1)*L(3)+L(2)*L(3) ); % Total surface area
+		V = prod(L);
+		alpha = -10^(-0.161*V/(beta*S))+1; % Absorption coefficient
+		beta =-sqrt(abs(1-alpha)).*ones(1,6); % Reflection coefficient
+	end
+
+	L  =  L./c*Fs*2; %#convert dimensions to indices
+	xr = xr./c*Fs;
+	xs = xs./c*Fs;
+	Rd = Rd./c*Fs;
+
+	assert(size(xr,1)==3); %check that the size are correct
+	K = size(xr,2);        %number of microphones
+
+	h = zeros(Nt,K);            % initialize output
+
+
+	
+    if(N == [0;0;0])
+        N = floor(Nt./L)+1;  % compute full order
+    end
+    
+    
+    if(Sr == 0) %compute new randomization of image sources
+	
+        Sr = sum(clock.*100);    
+        %obtain a new seed from clock
+    
+    end
+    
+    for k = 1:K
+	
+		rand('state', Sr);
+        for u = 0:1
+        for v = 0:1
+        for w = 0:1
+			
+                for l = -N(1):N(1)
+                for m = -N(2):N(2) 
+                for n = -N(3):N(3)
+	
+				% compute distance
+				d =(norm([(2*u-1)*xs(1)+xr(1,k)-l*L(1), ...
+				(2*v-1)*xs(2)+xr(2,k)-m*L(2),           ...
+				(2*w-1)*xs(3)+xr(3,k)-n*L(3)]           ...
+				+Rd*(2*rand(1,3)-1)*nnz(sum(abs([u;v;w;l;m;n])))) ... 
+				+1); %random displacement
+				% when norm(sum(abs( [u,v,w,l,m,n])),0) == 0 
+				% we have direct path, so
+				% no displacement is added
+	
+				% instead of moving the source on a line
+				% as in the paper, we are moving the source 
+				% in a cube with 2*Rd edge
+
+                %if index not exceed length h
+            
+                if(round(d)>Nt || round(d)<1)
+                    continue
+                end
+
+				if(Tw == 0)
+					indx = round(d); %calculate index  
+					s = 1;
+				else
+					indx = (max([ceil(d-Tw/2),1]):min([floor(d+Tw/2),Nt]));
+					% create time window
+					s = (1+cos(2*pi*(indx-d)/Tw)).*sinc(Fc*(indx-d))/2;
+					% compute filtered impulse
+				end
+	
+				A = prod(beta.^abs([l-u;l;m-v;m;n-w;n]))/(4*pi*(d-1));
+				h(indx,k) = h(indx,k) + (s.*A)';
+			
+                end            
+                end
+                end
+                
+        end
+        end
+        end
+    end
+    h = h.*(Fs/c);

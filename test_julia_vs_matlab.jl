@@ -6,11 +6,11 @@ include("ism.jl")
 
 c  = 343           # Speed of sound
 Fs = 4E4           # Sampling frequency
-Nt = round(Int64,4E4)   # Number of time samples
-xs = [2,1.5,1]     # Source position
-xr = [1,2,2]       # Receiver position
-L  = [4,4,4]       # Room dimensions
-N =  [ 0, 0, 0]    # Reflection order
+Nt = round(Int64,4E4/4)   # Number of time samples
+xs = [2;1.5;1]     # Source position
+xr = [1;2;2]       # Receiver position
+L  = [4;4;4]       # Room dimensions
+N =  [ 0; 0; 0]    # Reflection order
 
 β =  0.93.*ones(6)  # Reflection coefficient
 
@@ -27,11 +27,11 @@ toc()
 
 
 using MAT
-file = matopen("h_mat.mat")
+file = matopen("MATLAB/h_mat.mat")
 hm = read(file, "h_matlab")
 close(file)
 
 using PyPlot
 figure()
-plot(h./maximum(abs(h)))
-plot(hm./maximum(abs(hm)))
+plot(h)
+plot(hm)

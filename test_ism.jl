@@ -2,7 +2,7 @@ include("ism.jl")
 
 c  = 343            # Speed of sound
 Fs = 4E4            # Sampling frequency
-Nt = round(Int64,4E4)    # Number of time samples
+Nt = round(Int64,4E4/4)    # Number of time samples
 xs = [2,1.5,1]      # Source position
 xr = [1 2   2  ;
       1 2.3 2.3]'   # Receiver position
