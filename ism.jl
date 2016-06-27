@@ -3,9 +3,13 @@ function ISM(xr,xs,L,β,N,Nt,Rd,Sr,Tw,Fc,Fs,c)
 Image Source Method simulator
 
 Inputs: xr microphone positions (in meters) (3 element array)
+           xr = [xr,yr,zr]
         xs source position (in meters)
+           xs = [xs,ys,zs]
 	L  room dimension (in meters)
-	β  absorption coefficient (6 element array)
+           L = [Lx,Ly,Lz]
+	β  absorption coefficient 
+	   (6 element array)
            or T60 if 1 element array 
 	N  order of reflections 
 	   (set to [0,0,0] to compute full order)
@@ -13,12 +17,13 @@ Inputs: xr microphone positions (in meters) (3 element array)
 	Rd random displacement (in meters)
 	Sr seed of the random sequence
 	   (set 0 if you want to compute a new one)
-        Tw samples of low frequency filter
-	Fc cutoff frequency of LF filter
+        Tw samples of fractional delay
+	Fc cutoff frequency of fractional delay
 	Fs Sampling Frequency
 	c  Speed of sound
 Outputs: h  impuse response
-         Sr randomized displacement vector
+         Sr seed for the randomization
+            set to 0 to generate a new one
 	 (to be used if multiple IR are needed)
 =#
 	if(length(β) == 1)  # T60 is in input and is converted to β 

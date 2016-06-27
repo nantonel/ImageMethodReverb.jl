@@ -1,25 +1,30 @@
 function [h,Sr] =  ISM(xr,xs,L,beta,N,Nt,Rd,Sr,Tw,Fc,Fs,c)
 
-% Image Source Method simulator
-% 
-% Inputs: xr microphone positions (in meters) (3 element array)
-%         xs source position (in meters)
-% 	L  room dimension (in meters)
-% 	beta  absorption coefficient (6 element array)
-%            or T60 if 1 element array 
-% 	N  order of reflections 
-% 	   (set to [0,0,0] to compute full order)
-% 	Nt samples of impulse response
-% 	Rd random displacement (in meters)
-% 	Sr seed of the random sequence
-% 	   (set 0 if you want to compute a new one)
-%         Tw samples of low frequency filter
-% 	Fc cutoff frequency of LF filter
-% 	Fs Sampling Frequency
-% 	c  Speed of sound
-% Outputs: h  impuse response
-%          Sr randomized displacement vector
-% 	 (to be used if multiple IR are needed)
+%Image Source Method simulator
+%
+%Inputs: xr microphone positions (in meters) (3 element array)
+%           xr = [xr,yr,zr]
+%        xs source position (in meters)
+%           xs = [xs,ys,zs]
+%	L  room dimension (in meters)
+%           L = [Lx,Ly,Lz]
+%	β  absorption coefficient 
+%	   (6 element array)
+%           or T60 if 1 element array 
+%	N  order of reflections 
+%	   (set to [0,0,0] to compute full order)
+%	Nt samples of impulse response
+%	Rd random displacement (in meters)
+%	Sr seed of the random sequence
+%	   (set 0 if you want to compute a new one)
+%        Tw samples of fractional delay
+%	Fc cutoff frequency of fractional delay
+%	Fs Sampling Frequency
+%	c  Speed of sound
+%Outputs: h  impuse response
+%         Sr seed for the randomization
+%            set to 0 to generate a new one
+%	 (to be used if multiple IR are needed)
 
 	if(length(beta) == 1)  % T60 is in input and is converted to β 
 		S = 2*( L(1)*L(2)+L(1)*L(3)+L(2)*L(3) ); % Total surface area
@@ -38,23 +43,23 @@ function [h,Sr] =  ISM(xr,xs,L,beta,N,Nt,Rd,Sr,Tw,Fc,Fs,c)
 
 	h = zeros(Nt,K);            % initialize output
 
-
 	
-    if(N == [0;0;0])
-        N = floor(Nt./L)+1;  % compute full order
-    end
+	if(N == [0;0;0])
+		N = floor(Nt./L)+1;  % compute full order
+	end
     
     
-    if(Sr == 0) %compute new randomization of image sources
+    
+	if(Sr == 0) %compute new randomization of image sources
 	
-        Sr = sum(clock.*100);    
-        %obtain a new seed from clock
+		Sr = sum(clock.*100);    
+		%obtain a new seed from clock
+	end
     
-    end
-    
-    for k = 1:K
+  
+	for k = 1:K
 	
-		rand('state', Sr);
+	rand('state', Sr);
         for u = 0:1
         for v = 0:1
         for w = 0:1
@@ -103,5 +108,7 @@ function [h,Sr] =  ISM(xr,xs,L,beta,N,Nt,Rd,Sr,Tw,Fc,Fs,c)
         end
         end
         end
-    end
-    h = h.*(Fs/c);
+
+        end
+    
+	h = h.*(Fs/c);
