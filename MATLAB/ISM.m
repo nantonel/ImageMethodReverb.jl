@@ -25,7 +25,7 @@ function [h,Sr] =  ISM(xr,xs,L,beta,N,Nt,Rd,Sr,Tw,Fc,Fs,c)
 		S = 2*( L(1)*L(2)+L(1)*L(3)+L(2)*L(3) ); % Total surface area
 		V = prod(L);
 		alpha = -10^(-0.161*V/(beta*S))+1; % Absorption coefficient
-		beta =-sqrt(abs(1-alpha)).*ones(1,6); % Reflection coefficient
+		beta =-sqrt(abs(1-alpha)).*ones(6,1); % Reflection coefficient
 	end
 
 	L  =  L./c*Fs*2; %#convert dimensions to indices
