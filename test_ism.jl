@@ -19,22 +19,22 @@ Rd = 0.08           # random displacement
 t = linspace(0,Nt*1/Fs,Nt)
 f = linspace(0,Fs,Nt)
 # generate IR with new randomization
-tic()
-h, Sr  = ISM(xr,xs,L,T60,N,Nt, 0, 0,Tw,Fc,Fs,c)
-toc()
+@time h, Sr  = ISM(xr,xs,L,T60,N,Nt, 0, 0,0,Fc,Fs,c)
 # generate another IR with same randomization and
 
-tic()
-h2,    = ISM(xr,xs,L,T60,N,Nt,Rd,Sr,Tw,Fc,Fs,c)
-toc()
+@time h2,    = ISM2(xr,xs,L,T60,N,Nt,0,0,0,Fc,Fs,c)
+
+println("$(norm(h[:]-h2[:]))")
+
+
 
 using PyPlot
 figure()
-plot(t,h)
-plot(t,h2)
-
-figure()
-plot(f,10.*log10(abs(fft(h))))
-plot(f,10.*log10(abs(fft(h2))))
-xlim([0,500])
-
+plot(t,h[:,1])
+plot(t,h2[:,1])
+#
+#figure()
+#plot(f,10.*log10(abs(fft(h))))
+#plot(f,10.*log10(abs(fft(h2))))
+#xlim([0,500])
+#
