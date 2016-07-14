@@ -4,12 +4,12 @@ include("ism.jl")
 # of Enzo de Sena: http://www.desena.org/sweep/ 
 
 
-c  = 343           # Speed of sound
+c  = 343.          # Speed of sound
 Fs = 4E4           # Sampling frequency
 Nt = round(Int64,4E4/4)   # Number of time samples
-xs = [2;1.5;1]     # Source position
-xr = [1;2;2]       # Receiver position
-L  = [4;4;4]       # Room dimensions
+xs = [2.;1.5;1.]     # Source position
+xr = [1.;2.;2.]       # Receiver position
+L  = [4.;4.;4.]       # Room dimensions
 N =  [ 0; 0; 0]    # Reflection order
 
 β =  0.93.*ones(6)  # Reflection coefficient
@@ -22,7 +22,7 @@ Rd = 0.00          # random displacement
 t = linspace(0,Nt*1/Fs,Nt)
 # generate IR with randomization
 tic()
-h, Nr  = ISM(xr,xs,L,  β,N,Nt, 0, 0,Tw,Fc,Fs,c)
+h, Nr  = ISM(xr,xs,L,  β,N,Nt, Rd, 0,Tw,Fc,Fs,c)
 toc()
 
 
@@ -35,3 +35,5 @@ using PyPlot
 figure()
 plot(h)
 plot(hm)
+
+println("error between matlab and julia: $(norm(hm-h))")

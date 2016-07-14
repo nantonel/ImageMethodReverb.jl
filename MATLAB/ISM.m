@@ -68,12 +68,17 @@ function [h,Sr] =  ISM(xr,xs,L,beta,N,Nt,Rd,Sr,Tw,Fc,Fs,c)
                 for m = -N(2):N(2) 
                 for n = -N(3):N(3)
 	
+
+				%position of image source
+				pos_is = [
+				xs(1)-2*u*xs(1)+l*L(1);... 
+				xs(2)-2*v*xs(2)+m*L(2);...
+				xs(3)-2*w*xs(3)+n*L(3)];    
+				
 				% compute distance
-				d =(norm([(2*u-1)*xs(1)+xr(1,k)-l*L(1), ...
-				(2*v-1)*xs(2)+xr(2,k)-m*L(2),           ...
-				(2*w-1)*xs(3)+xr(3,k)-n*L(3)]           ...
-				+Rd*(2*rand(1,3)-1)*nnz(sum(abs([u;v;w;l;m;n])))) ... 
-				+1); %random displacement
+				rand_disp = Rd*(2*rand(3,1)-1)*nnz(sum(abs([u;v;w;l;m;n])));
+				d = norm(pos_is+rand_disp-xr(:,k))+1;
+
 				% when norm(sum(abs( [u,v,w,l,m,n])),0) == 0 
 				% we have direct path, so
 				% no displacement is added
