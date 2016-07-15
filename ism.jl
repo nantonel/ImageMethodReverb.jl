@@ -18,7 +18,7 @@ Inputs: xr microphone positions (in meters) (3 element array)
 	Nt samples of impulse response
 	Rd random displacement (in meters)
 	Sr seed of the random sequence
-	   (set 0 if you want to compute a new one)
+	   (set to [] if you want to compute a new one)
         Tw samples of fractional delay
 	Fc cutoff frequency of fractional delay
 	Fs Sampling Frequency
@@ -50,7 +50,7 @@ Outputs: h  impuse response
 		N = floor(Int64,Nt./L)+1  # compute full order
 	end
 
-	if(Sr == 0) # compute new randomization of image sources
+	if(isempty(Sr)) # compute new randomization of image sources
 	Sr = ccall( (:clock, "libc"), Int32, ()) #obtain a new seed from clock
         end
 

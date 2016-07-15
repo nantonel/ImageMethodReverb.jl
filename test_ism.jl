@@ -19,9 +19,9 @@ Rd = 0.01           # random displacement
 t = linspace(0,Nt*1/Fs,Nt)
 f = linspace(0,Fs,Nt)
 # generate IR with new randomization
-@time h, Sr  = ISM(xr,xs,L,T60,N,Nt, Rd, 0,Tw,Fc,Fs,c)
-# generate another IR with same randomization and
+@time h, Sr  = ISM(xr,xs,L,T60,N,Nt, Rd, [],Tw,Fc,Fs,c)
 
+# generate another IR with same randomization and
 @time h2,    = ISM(xr,xs,L,T60,N,Nt,Rd, Sr,Tw,Fc,Fs,c)
 
 println("$(norm(h[:]-h2[:]))")

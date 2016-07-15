@@ -19,12 +19,12 @@ t = linspace(0,Nt*1/Fs,Nt);
 f = linspace(0,Fs,Nt);
 % generate IR with new randomization
 tic()
-[h, Sr]  = ISM(xr,xs,L,T60,N,Nt, Rd, 0,Tw,Fc,Fs,c);
+[h, Sr]  = ISM(xr,xs,L,T60,N,Nt, Rd, [],Tw,Fc,Fs,c);
 toc()
 % generate another IR with no randomization
 
 tic()
-[h2,~]   = ISM(xr,xs,L,T60,N,Nt,0,0,Tw,Fc,Fs,c);
+[h2,~]   = ISM(xr,xs,L,T60,N,Nt,0,[],Tw,Fc,Fs,c);
 toc()
 
 figure()
