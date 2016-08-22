@@ -1,5 +1,5 @@
 using RIM
 using Base.Test
 
-# write your own tests here
-@test 1 == 1
+include("test_ism.jl")
+include("test_julia_vs_matlab.jl")

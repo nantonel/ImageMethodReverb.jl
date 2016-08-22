@@ -1,5 +1,9 @@
+__precompile__()
+
 module RIM
 
-# package code goes here
+include("rim.jl")
 
-end # module
+export rim
+
+end
