@@ -61,8 +61,6 @@ A single channel MATLAB implementation of the RIM can be found in:
 A less efficient MATLAB multi-channel version can be found here in the MATLAB folder with the same code structure as the Julia version.
 
 
-
-
 ## References
 
 1. [E. De Sena, N. Antonello, M. Moonen, and T. van Waterschoot, "On the Modeling of
@@ -71,3 +69,8 @@ Language Processing, vol. 21, no. 4, April 2015.](http://ieeexplore.ieee.org/xpl
 
 
 Notice that instead of moving the source on a line as in the paper, here the image sources are dispalced in a cube with (2 Rd) edge.
+
+
+## Credits
+
+RIM.jl is developed by [Niccolò Antonello](http://homes.esat.kuleuven.be/~nantonel/) at [KU Leuven, ESAT/Stadius](https://www.esat.kuleuven.be/stadius/).
