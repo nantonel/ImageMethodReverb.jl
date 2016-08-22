@@ -25,22 +25,22 @@ h = = rim(Fs,c,xr,xs,L,T60,Nt)
 
 * `Fs::Float64`         : Sampling Frequency 
 * `c::Float64`          : Speed of sound
-* `xr::Array{Float64}`  : Microphone positions (in meters) (3 by Nm Array) where Nm is number of microphones
+* `xr::Array{Float64}`  : Microphone positions (in meters) (3 by `Nm` Array) where `Nm` is number of microphones
 * `xs::Array{Float64}`  : source positions (in meters) (must be a 3 by 1 Array)
 * `L::Array{Float64,1}` : room dimensions  (in meters), must be a 3 dimensional Array
 * `β`                   : if a 6 element Array is given each element 
                           represents the reflectlion coefficient of a wall, 
                           if a 1 element Array is given instead this represents 
-                          the T60 and all the walls have the same reflection coefficients 
+                          the `T60` and all the walls have the same reflection coefficients 
                           Nt samples of impulse response
 
 
 ### Optional parameters:
 
 * `N:Array{Int64,1} = [0;0;0]`: 3 element Array representing order of reflection 
-                                (set to [0;0;0] to compute full order).
+                                (set to `[0;0;0]` to compute full order).
 * `Rd::Float64 = 1e-2`        : random displacement of image sources (in meters).
-* `Sr = []`                   : seed of the random sequence (set to [] if you want to compute a new randomization). 
+* `Sr = []`                   : seed of the random sequence (set to `[]` if you want to compute a new randomization). 
 * `Tw::Int64 = 20`            : taps of fractional delay filter
 * `Fc::Float64 = 0.9`         : cut-off frequency of fractional delay filter
 
