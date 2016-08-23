@@ -32,10 +32,10 @@ where `Lx`,`Ly`,`Lz` are the room
 dimensions in meters and `T60` 
 is the desired reverberation time. 
 Alternatively you can specify the reflection 
-coefficient $\beta$ using a 6 element Array:
+coefficient \beta using a 6 element Array:
 ```julia
-$\beta$ = [0.9;0.9;0.7;0.7;0.8;0.8];
-geo = cuboidRoom(Lx,Ly,Lz,$\beta$);
+\beta = [0.9;0.9;0.7;0.7;0.8;0.8];
+geo = cuboidRoom(Lx,Ly,Lz,\beta);
 ```
 Once this is done select 
 your source position, 
@@ -71,7 +71,7 @@ cuboidRoom(Lx,Ly,Lz,T60,Rd = myRd, Sr = mySr)
 ```
 or 
 ```julia
-cuboidRoom(Lx,Ly,Lz,$\beta$,Rd = myRd, Sr = mySr)
+cuboidRoom(Lx,Ly,Lz,\beta,Rd = myRd, Sr = mySr)
 ```
 
 
