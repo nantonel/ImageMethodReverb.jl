@@ -60,3 +60,46 @@ function get_β(Lx::Float64,Ly::Float64,Lz::Float64,T60::Float64)
 	β =-sqrt(abs(1-α)).*ones(6) # Reflection coefficient
 	return β
 end
+
+
+
+"""
+`cuboid room object with Frequency Dependent absorption coefficients`
+
+Returns a `cuboidRoom` object containing the geometrical information of the room.
+
+# Arguments 
+
+* `Lx::Float64`: x dimension of room 
+* `Ly::Float64`: y dimension of room
+* `Lx::Float64`: z dimension of room
+* `βfir::Array{Float64,1}` array containing Finite Impulse Response of β
+
+by default the random displacement is set to `Rd = 1e-2`. The randomization of the image sources is saved in an internal variable of the `cuboidRoom` object in `Sr::Int64`. 
+
+To change these default values type:
+
+* `cuboidRoom(Lx,Ly,Lz,T60,Rd = myRd, Sr = mySr)`
+
+"""
+immutable cuboidRoomFD <: AbstractGeometry
+	Lx::Float64   #x dimension
+	Ly::Float64   #y dimension
+	Lz::Float64   #z dimension
+	βfir::Array{Float64}     #finite impulse response of filter β
+	Rd::Float64              #random displacement
+	Sr::Int64                #seed random displacement
+
+
+	#random displacement β input
+	function cuboidRoomFD(Lx::Float64,Ly::Float64,Lz::Float64,β::Array{Float64,1};  
+		            Rd::Float64 = 1e-2, Sr::Int64 = rand(1:10000) )
+
+		if(any([Lx;Ly;Lz].< 0)) error("room dimensions L should be positive") end
+		new(Lx,Ly,Lz,β,Rd,Sr)
+	end
+
+
+end
+
+
