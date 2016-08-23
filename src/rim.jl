@@ -34,7 +34,7 @@ Randomized Image Source Method
 
 function rim(Fs::Float64,c::Float64,xr::Array{Float64},xs::Array{Float64},
 	     L::Array{Float64,1},β,Nt::Int64;
-	     N::Array{Int64,1} = [0;0;0],Rd::Float64 = 1e-2, Sr = [],Tw::Int64 = 20,Fc::Float64 =0.9)
+	     N::Array{Int64,1} = [0;0;0],Rd::Float64 = 1e-2, Sr = [], Tw::Int64 = 20,Fc::Float64 =0.9)
 	     
 	if(Fs< 0) error("Fs should be positive") end
 	if(c< 0)  error("c should be positive") end
