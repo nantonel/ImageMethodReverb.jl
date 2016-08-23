@@ -44,8 +44,8 @@ sampling frequency:
 ```julia
 xs = [0.5 0.5 0.5]';                    #src pos (in meters)
 xr = [Lx-0.1 Ly-0.3 Lz-0.2; 2. 2. 2.]'; #mic pos
-Fs = 1e4;                               #Sampling Frequency
-Nt = round(Int64,Fs);                  #time samples (1 sec)
+Fs = 4e4;                               #Sampling Frequency
+Nt = round(Int64,Fs/4);                 #time samples (1/4 sec)
 ```
 Now type:
 ```julia

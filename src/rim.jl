@@ -34,6 +34,8 @@ function rim(Fs::Float64,Nt::Int64,
 	if(c< 0)  error("c should be positive") end
 	if(size(xr,1)!=3)  error("size(xr,1) must be 3") end
 	if(size(xs,1)!=3 || size(xs,2)!=1) error("size(xs,1) must be (3,1)") end
+	if(any(xs.>[geo.Lx;geo.Ly;geo.Ly]) || any(xs.<[0;0;0])) error("xs outside domain") end
+	if(any(xr.>[geo.Lx;geo.Ly;geo.Ly]) || any(xr.<[0;0;0])) error("xr outside domain") end
 	if(any(N.< 0)) error("N should be positive") end
 
 	L  =  [geo.Lx;geo.Ly;geo.Ly]./c*Fs*2  #convert dimensions to indices
