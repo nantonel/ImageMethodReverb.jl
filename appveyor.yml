@@ -30,5 +30,5 @@ build_script:
   - C:\projects\julia\bin\julia -e "versioninfo();
       Pkg.clone(pwd(), \"RIM\"); Pkg.build(\"RIM\")"
 
-test_script:
+test_script:  
   - C:\projects\julia\bin\julia --check-bounds=yes -e "Pkg.test(\"RIM\")"

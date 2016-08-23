@@ -1,9 +1,10 @@
-#__precompile__()
+__precompile__()
 
 module RIM
 
+include("acgeometry.jl")
 include("rim.jl")
 
-export rim
+export rim,cuboidRoom
 
 end
