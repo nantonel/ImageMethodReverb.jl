@@ -1,5 +1,3 @@
-using RIM
-using Base.Test
 #include("../src/rim.jl")
 #testing seed
 
