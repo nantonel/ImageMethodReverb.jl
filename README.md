@@ -93,7 +93,7 @@ CuboidRoom(Lx,Ly,Lz,β,Rd = myRd, Sr = mySr)
 ### `CuboidRoomFD`
 
 
-The function `CuboidRoomFD` has the same default additional parameters as `CuboidRoom`: 
+The function `CuboidRoomFD` has the same default additional parameters as `CuboidRoom`. 
 
 
 ### `rim`

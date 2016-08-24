@@ -5,5 +5,3 @@ export CuboidRoom,
 
 include("cuboidRoom.jl")
 include("cuboidRoomFD.jl")
-
-return
