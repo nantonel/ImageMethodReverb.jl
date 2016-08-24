@@ -13,7 +13,7 @@ xr = [1.;2.;2.]           # Receiver position
 Lx,Ly,Lz  = 4.,4.,4.           # Room dimensions
 β =  0.93.*ones(6)  # Reflection coefficient
 Rd = 0.00          # random displacement   
-geo = cuboidRoom(Lx,Ly,Lz,β; Rd = Rd)
+geo = CuboidRoom(Lx,Ly,Lz,β; Rd = Rd)
 
 Tw = 40            # samples of Low pass filter 
 Fc = 0.9           # cut-off frequency

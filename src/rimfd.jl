@@ -2,8 +2,8 @@
 
 function rim(Fs::Float64,Nt::Int64,
              xr::Array{Float64},xs::Array{Float64},
-	     geo::cuboidRoomFD;
-	     c::Float64 = 343.,  N::Array{Int64,1} = [4;4;4], Tw::Int64 = 20,Fc::Float64 = 0.9)
+	     geo::CuboidRoomFD;
+	     c::Float64 = 343.,  N::Array{Int64,1} = [0;0;0], Tw::Int64 = 20,Fc::Float64 = 0.9)
 	     
 	if(Fs< 0) error("Fs should be positive") end
 	if(c< 0)  error("c should be positive") end
@@ -13,15 +13,6 @@ function rim(Fs::Float64,Nt::Int64,
 	if(any(xr.>[geo.Lx;geo.Ly;geo.Ly]) || any(xr.<[0;0;0])) error("xr outside domain") end
 	if(any(N.< 0)) error("N should be positive") end
 	if(Tw == 0) error("freq dep rim not implemented without fractional delays") end
-
-
-	Nβ =  length(geo.βfir)  #number of taps of βfir
-	βfir = zeros(Float64,Nβ,N[1]+1)
-	βfir[:,1] = copy(geo.βfir)
-	for i = 2:maximum(N)+1
-		βfir[:,i] = conv(βfir[:,i-1],geo.βfir)[1:Nβ]
-	end
-	#convolve βfir with itself recursively up to maximum order of reflection
 
 	L  =  [geo.Lx;geo.Ly;geo.Ly]./c*Fs*2  #convert dimensions to indices
 	xr = xr./c*Fs
@@ -65,29 +56,33 @@ function rim(Fs::Float64,Nt::Int64,
 					continue
 				end
 
-				indx = (
+				indx0 = (
 				maximum([ceil(Int64,d-Tw/2),1]):minimum([floor(Int64,d+Tw/2),Nt])
 				        )
 				# create time window
 					
 				if(norm(sum(abs([u,v,w,l,m,n])),0)==0) #direct path
-					s = (1+cos(2*π*(indx-d)/Tw)).*sinc(Fc*(indx-d))/2
+					s = (1+cos(2*π*(indx0-d)/Tw)).*sinc(Fc*(indx0-d))/2
 					# fractional filter, no convolution with βfir
+					A = 1/(4*π*(d-1))
+					h[indx0,k] = h[indx0,k] + s.*A
 				else
-					s = (1+cos(2*π*(indx-d)/Tw)).*sinc(Fc*(indx-d))/2
-					s = conv(s,βfir[:,maximum(abs([l;m;n]))+1])
-					# s will be a Nβ+Tw long signal
-					indend = Nβ-Tw/2 #final index 
+					s = (1+cos(2*π*(indx0-d)/Tw)).*sinc(Fc*(indx0-d))/2
+					s = [s;zeros(Float64,max(geo.NT-Tw,1))]
+					# s will be a NT+Tw long signal
+					s = conv_βfir(s,geo,l,m,n,u,v,w)
+					indend = max(geo.NT-Tw/2,Tw/2) #final index 
 					indx = (
 				maximum([ceil(Int64,d-Tw/2),1]):minimum([floor(Int64,d+indend),Nt])
 				               )
 					#just to be sure s and indx have same length
 					s = s[1:min(length(indx),length(s))]
 					indx = indx[1:length(s)]
+				
+					A = 1/(4*π*(d-1))
+					h[indx,k] = h[indx,k] + s.*A
 				end
 	
-				A = 1/(4*π*(d-1))
-				h[indx,k] = h[indx,k] + s.*A
 			end
 		end
 	end
@@ -95,3 +90,39 @@ function rim(Fs::Float64,Nt::Int64,
 return h.*(Fs/c)
 
 end
+
+function conv_βfir(s::Array{Float64,1},geo::CuboidRoomFD,
+		   l::Int64,m::Int64,n::Int64,u::Int64,v::Int64,w::Int64)
+
+	w_ord    = abs([l-u,l,m-v,m,n-w,n]) #wall orders
+	act_ords = find(w_ord)            #active orders
+
+	for i = 1:length(act_ords) #for all active orders
+		for ii = 1:w_ord[act_ords[i]] #convolve s up to max order
+			filt!(s,geo.b[:,i][:],geo.a[:,i][:],s)
+		end
+	end
+	return s
+
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

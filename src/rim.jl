@@ -27,7 +27,7 @@ Randomized Image Source Method
 
 function rim(Fs::Float64,Nt::Int64,
              xr::Array{Float64},xs::Array{Float64},
-	     geo::cuboidRoom;
+	     geo::CuboidRoom;
 	     c::Float64 = 343.,  N::Array{Int64,1} = [0;0;0], Tw::Int64 = 20,Fc::Float64 = 0.9)
 	     
 	if(Fs< 0) error("Fs should be positive") end

@@ -26,20 +26,36 @@ First you need to specify the dimensions of the cuboid room and acoustic propert
 using RIM
 Lx,Ly,Lz = 4.,5.,3.;
 T60 = 0.5;
-geo = cuboidRoom(Lx,Ly,Lz,T60);
+geo = CuboidRoom(Lx,Ly,Lz,T60);
 ```
 where `Lx`,`Ly`,`Lz` are the room 
 dimensions in meters and `T60` 
 is the desired reverberation time. 
+All the wall surfaces will 
+have the same reflection coefficient β.
 Alternatively you can specify the reflection 
 coefficient β using a 6 element Array:
 ```julia
 β = [0.9;0.9;0.7;0.7;0.8;0.8];
-geo = cuboidRoom(Lx,Ly,Lz,β);
+geo = CuboidRoom(Lx,Ly,Lz,β);
 ```
+You can also use frequency 
+dependent reflection coefficients 
+by specifying a IIR filter.
+```julia
+b = [0.64;  -0.78;   0.14] 
+a = [ 1.0;  -1.43;   0.44]
+NT = 500;                       #number of samples for which the convolution with IIR is truncated
+geo = CuboidRoomFD(Lx,Ly,Lz,b,a,NT);
+```
+Notice that frequency dependent 
+reflection coefficients 
+leads to simulations that are 
+more computationally expensive.
+
 Once this is done select 
 your source position, 
-microphone positions,
+microphone positions and
 sampling frequency:
 ```julia
 xs = [0.5 0.5 0.5]';                    #src pos (in meters)
@@ -57,25 +73,30 @@ to obtain your room impulse response.
 ## Changing default parameters
 
 
-### `cuboidRoom`
+### `CuboidRoom`
 
 
-The function `cuboidRoom` has the default additional parameters: 
+The function `CuboidRoom` has the default additional parameters: 
 
 * `Rd = 1e2`: random displacement of image sources.
 * `Sr`: seed of the randomization which by default is a random integer.
 
 One can change this by typing:
 ```julia
-cuboidRoom(Lx,Ly,Lz,T60,Rd = myRd, Sr = mySr)
+CuboidRoom(Lx,Ly,Lz,T60,Rd = myRd, Sr = mySr)
 ```
 or 
 ```julia
-cuboidRoom(Lx,Ly,Lz,β,Rd = myRd, Sr = mySr)
+CuboidRoom(Lx,Ly,Lz,β,Rd = myRd, Sr = mySr)
 ```
 
+### `CuboidRoomFD`
 
-### `cuboidRoom`
+
+The function `CuboidRoomFD` has the same default additional parameters as `CuboidRoom`: 
+
+
+### `rim`
 
 
 The function `rim` has the default additional parameters:
@@ -97,7 +118,7 @@ rim(Fs,Nt,xr,xs,geo; c = myc, N = myN, Tw = myTw, Fc = myFc)
 A single channel MATLAB implementation of the RIM can be found in:
 [http://www.desena.org/sweep/](http://www.desena.org/sweep/)
 
-A less efficient MATLAB multi-channel version can be found here in the MATLAB folder with the same code structure as the Julia version.
+A less efficient MATLAB multi-channel version can be found here in the MATLAB folder with the similar code structure as in the Julia version.
 
 
 ## References

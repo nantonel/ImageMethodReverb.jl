@@ -9,7 +9,7 @@ xr = [1 2   2  ;
       1 2.3 2.3]'   # Receiver position
 Lx,Ly,Lz  = 4.,4.,4.# Room dimensions
 T60 = 1.0           # Reverberation Time
-geo = cuboidRoom(Lx,Ly,Lz,T60)
+geo = CuboidRoom(Lx,Ly,Lz,T60)
 
 Tw = 20              # samples of Low pass filter 
 Fc = 0.9            # cut-off frequency

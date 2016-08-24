@@ -6,6 +6,6 @@ include("acgeometry.jl")
 include("rim.jl")
 include("rimfd.jl")
 
-export rim,cuboidRoom,cuboidRoomFD
+export rim
 
 end
