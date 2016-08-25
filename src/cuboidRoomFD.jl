@@ -30,23 +30,31 @@ immutable CuboidRoomFD <: AbstractGeometry
 	Sr::Int64                #seed random displacement
 
 
-	#random displacement single βfir input
-	function CuboidRoomFD(Lx::Float64,Ly::Float64,Lz::Float64,
-		              b::Array{Float64,1},a::Array{Float64,1},NT::Int64;  
-		              Rd::Float64 = 1e-2, Sr::Int64 = rand(1:10000) )
+	function CuboidRoomFD(Lx::Float64,Ly::Float64,Lz::Float64,             
+	                      b::Array{Float64,2},a::Array{Float64,2},     
+	                      NT::Int64,Rd::Float64,Sr::Int64)
+
 		if(any([Lx;Ly;Lz].< 0)) error("room dimensions L should be positive") end
-		new(Lx,Ly,Lz,repmat(b,1,6),repmat(a,1,6),NT,Rd,Sr)
-	end
-	#random displacement single βfir input
-	function CuboidRoomFD(Lx::Float64,Ly::Float64,Lz::Float64,
-		              b::Array{Float64,2},a::Array{Float64,2},NT::Int64;  
-		              Rd::Float64 = 1e-2, Sr::Int64 = rand(1:10000) )
-		if(any([Lx;Ly;Lz].< 0)) error("room dimensions L should be positive") end
-		if(size(b,1) != 6 || size(a,1) != 6) 
+		if(NT< 0) error("NT must be positive") end
+		if(Sr < 0) error("Sr must be positive") end
+		if(size(b,2) != 6 || size(a,2) != 6) 
 			error("size of βfir must be either (n,) or (n,6)") 
 		end
+
 		new(Lx,Ly,Lz,b,a,NT,Rd,Sr)
 	end
 
 
 end
+
+#random displacement single βfir input
+CuboidRoomFD(Lx::Float64,Ly::Float64,Lz::Float64,
+		      b::Array{Float64,1},a::Array{Float64,1},NT::Int64;  
+		      Rd::Float64 = 1e-2, Sr::Int64 = rand(1:10000) ) = 
+CuboidRoomFD(Lx,Ly,Lz,repmat(b,1,6),repmat(a,1,6),NT,Rd,Sr)
+
+#random displacement single βfir input
+CuboidRoomFD(Lx::Float64,Ly::Float64,Lz::Float64,
+	     b::Array{Float64,2},a::Array{Float64,2},NT::Int64;  
+	     Rd::Float64 = 1e-2, Sr::Int64 = rand(1:10000) ) = 
+CuboidRoomFD(Lx,Ly,Lz,b,a,NT,Rd,Sr)

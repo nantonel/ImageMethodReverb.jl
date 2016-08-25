@@ -3,7 +3,7 @@ Randomized Image Source Method
 
 # Arguments: 
 
-* `Fs::Float64`         : Sampling Frequency 
+* `env::AcEnv`          : Acustic environment 
 * `Nt::Int64`           : Time samples
 * `xr::Array{Float64}`  : Microphone positions (in meters) (3 by Nm `Array`) where Nm is number of microphones
 * `xs::Array{Float64}`  : source positions (in meters) (must be a 3 by 1 `Array`)
@@ -12,7 +12,6 @@ Randomized Image Source Method
 
 # Optional parameters:
 
-* `c::Float64 = 343.`         : Speed of sound
 * `N:Array{Int64,1} = [0;0;0]`: 3 element `Array` representing order of reflection 
                                 (set to [0;0;0] to compute full order).
 * `Tw::Int64 = 20`            : taps of fractional delay filter
@@ -25,23 +24,19 @@ Randomized Image Source Method
 		       the microphone positions `xr`
 """
 
-function rim(Fs::Float64,Nt::Int64,
-             xr::Array{Float64},xs::Array{Float64},
+function rim(env::AcEnv, Nt::Int64,
+             xr::AbstractCartPos,xs::AbstractCartPos,
 	     geo::CuboidRoom;
-	     c::Float64 = 343.,  N::Array{Int64,1} = [0;0;0], Tw::Int64 = 20,Fc::Float64 = 0.9)
+	     N::Array{Int64,1} = [0;0;0], Tw::Int64 = 20,Fc::Float64 = 0.9)
 	     
-	if(Fs< 0) error("Fs should be positive") end
-	if(c< 0)  error("c should be positive") end
-	if(size(xr,1)!=3)  error("size(xr,1) must be 3") end
-	if(size(xs,1)!=3 || size(xs,2)!=1) error("size(xs,1) must be (3,1)") end
-	if(any(xs.>[geo.Lx;geo.Ly;geo.Ly]) || any(xs.<[0;0;0])) error("xs outside domain") end
-	if(any(xr.>[geo.Lx;geo.Ly;geo.Ly]) || any(xr.<[0;0;0])) error("xr outside domain") end
+	if(any(xs.pos.>[geo.Lx;geo.Ly;geo.Ly]) || any(xs.pos.<[0;0;0])) error("xs outside domain") end
+	if(any(xr.pos.>[geo.Lx;geo.Ly;geo.Ly]) || any(xr.pos.<[0;0;0])) error("xr outside domain") end
 	if(any(N.< 0)) error("N should be positive") end
 
-	L  =  [geo.Lx;geo.Ly;geo.Ly]./c*Fs*2  #convert dimensions to indices
-	xr = xr./c*Fs
-	xs = xs./c*Fs
-	Rd = geo.Rd./c*Fs
+	L  =  [geo.Lx;geo.Ly;geo.Ly]./env.c*env.Fs*2  #convert dimensions to indices
+	xr = xr.pos./env.c*env.Fs
+	xs = xs.pos./env.c*env.Fs
+	Rd = geo.Rd./env.c*env.Fs
 
 	K = size(xr,2)        #number of microphones
 
@@ -98,7 +93,7 @@ function rim(Fs::Float64,Nt::Int64,
 		end
 	end
 
-return h.*(Fs/c)
+return h.*(env.Fs/env.c)
 
 end
 

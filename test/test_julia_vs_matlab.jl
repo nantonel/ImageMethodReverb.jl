@@ -5,8 +5,8 @@
 # of Enzo de Sena: http://www.desena.org/sweep/ 
 
 
-c  = 343.          # Speed of sound
-Fs = 4E4           # Sampling frequency
+Fs = 4e4            # Sampling frequency
+env = AcEnv(Fs)   # create new acoustic env with default values
 Nt = round(Int64,4E4/4)   # Number of time samples
 xs = [2.;1.5;1.]          # Source position
 xr = [1.;2.;2.]           # Receiver position
@@ -19,13 +19,14 @@ Tw = 40            # samples of Low pass filter
 Fc = 0.9           # cut-off frequency
 
 # generate IR with randomization
-@time h  = rim(Fs,Nt,xr,xs,geo; Tw = Tw, Fc = Fc)
+@time h  = rim(env,Nt,xr,xs,geo; Tw = Tw, Fc = Fc)
 
 using MAT
-file = matopen("../MATLAB/h_mat.mat")
+file = matopen("../src/MATLAB/h_mat.mat")
 hm = read(file, "h_matlab")
 close(file)
 @test norm(hm-h)<1e-8
+println("matlab reference test passed")
 
 #using PyPlot
 #figure()

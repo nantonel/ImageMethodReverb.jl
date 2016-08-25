@@ -1,8 +1,8 @@
 using RIM
 #testing frequency dependent boundaries
 
-c  = 343.           # Speed of sound
 Fs = 8E3            # Sampling frequency
+env = AcEnv(Fs)   # create new acoustic env with default values
 Nt = round(Int64,4E4/8)    # Number of time samples, 0.25 secs
 xs = [2.;1.5;1.]      # Source position
 xr = [1. 2.  2.]'   # Receiver position
@@ -16,10 +16,10 @@ geo = CuboidRoomFD(Lx,Ly,Lz,b,a,500; Rd = 0.)
 geo2 = CuboidRoom(Lx,Ly,Lz,0.9*ones(6); Rd = 0.)
 
 ## generate IR with frequency dependent β
-@time h  = rim(Fs,Nt,xr,xs,geo; N = [4;4;4])
+@time h  = rim(env,Nt,xr,xs,geo; N = [4;4;4])
 #
 ## generate another IR with frequency independent β
-@time h2 = rim(Fs,Nt,xr,xs,geo2; N = [4;4;4])
+@time h2 = rim(env,Nt,xr,xs,geo2; N = [4;4;4])
 
 #using PyPlot
 #t = linspace(0,Nt*1/Fs,Nt)

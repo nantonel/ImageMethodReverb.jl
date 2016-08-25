@@ -25,26 +25,29 @@ immutable CuboidRoom <: AbstractGeometry
 	Rd::Float64           #random displacement
 	Sr::Int64             #seed random displacement
 
-
-	#random displacement β input
-	function CuboidRoom(Lx::Float64,Ly::Float64,Lz::Float64,β::Array{Float64,1};  
-		            Rd::Float64 = 1e-2, Sr::Int64 = rand(1:10000) )
+	function CuboidRoom(Lx::Float64,Ly::Float64,Lz::Float64,
+		             β::Array{Float64,1},Rd::Float64,Sr::Int64)
 
 		if(any([Lx;Ly;Lz].< 0)) error("room dimensions L should be positive") end
 		if(length(β)!= 6) error("length(β) must be 6") end
+		if(Sr < 0) error("Sr must be positive") end
+
 		new(Lx,Ly,Lz,β,Rd,Sr)
 	end
 
-	#random displacement T60 input
-	function CuboidRoom(Lx::Float64,Ly::Float64,Lz::Float64,T60::Float64;
+end
+
+
+CuboidRoom(Lx::Float64,Ly::Float64,Lz::Float64,β::Array{Float64,1};  
+	   Rd::Float64 = 1e-2, Sr::Int64 = rand(1:10000) ) = CuboidRoom(Lx,Ly,Lz,β,Rd,Sr)
+	
+
+#random displacement T60 input
+function CuboidRoom(Lx::Float64,Ly::Float64,Lz::Float64,T60::Float64;
 		            Rd::Float64 = 1e-2, Sr::Int64 = rand(1:10000) )
 
-		if(any([Lx;Ly;Lz].< 0)) error("room dimensions L should be positive") end
-		β = get_β(Lx,Ly,Lz,T60)
-		new(Lx,Ly,Lz,β,Rd,Sr)
-
-	end
-
+	β = get_β(Lx,Ly,Lz,T60)
+	CuboidRoom(Lx,Ly,Lz,β,Rd,Sr)
 
 end
 
