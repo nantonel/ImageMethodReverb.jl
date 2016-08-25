@@ -11,8 +11,8 @@ abstract AbstractCartPos     <:LinearAcoustics
 include("acenvironment.jl")
 include("acgeometry.jl")
 include("acpos.jl")
-include("rim.jl")
-include("rimfd.jl")
+include("rim_solver.jl")
+include("rim_fd_solver.jl")
 
 rim(env::AcEnv, Nt::Int64,xr::Array{Float64},xs::Array{Float64}, args...; kwargs...) = 
 rim(env,Nt,CartPos(xr),CartPos(xs), args...; kwargs...)

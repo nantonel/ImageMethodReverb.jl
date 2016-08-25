@@ -2,7 +2,7 @@
 
 
 [![Build Status](https://travis-ci.org/nantonel/RIM.jl.svg?branch=master)](https://travis-ci.org/nantonel/RIM.jl.svg?branch=master)
-
+[![Coverage Status](https://coveralls.io/repos/github/nantonel/RIM.jl/badge.svg?branch=master)](https://coveralls.io/github/nantonel/RIM.jl?branch=master)
 
 Room Acoustics Impulse Response Generator using the Randomized Image Method (RIM)
 
