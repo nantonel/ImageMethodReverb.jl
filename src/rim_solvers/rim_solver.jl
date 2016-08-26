@@ -5,8 +5,8 @@ Randomized Image Source Method
 
 * `env::AcEnv`          : Acustic environment 
 * `Nt::Int64`           : Time samples
-* `xr::Array{Float64}`  : Microphone positions (in meters) (3 by Nm `Array`) where Nm is number of microphones
-* `xs::Array{Float64}`  : source positions (in meters) (must be a 3 by 1 `Array`)
+* `xs::Array{Float64}`  : Source positions (in meters) (3 by Nm `Array`) where Nm is number of microphones
+* `xr::Array{Float64}`  : Microphone positions (in meters) (must be a 3 by 1 `Array`)
 * `geo::cuboidRoom`     : object containing dimensions, acoustic properties and random displacement of image sources of the room 
 
 
@@ -24,14 +24,16 @@ Randomized Image Source Method
 		       the microphone positions `xr`
 """
 
-function rim(env::AcEnv, Nt::Int64,
-             xr::AbstractCartPos,xs::AbstractCartPos,
-	     geo::CuboidRoom;
+function rim(xs::AbstractCartPos,xr::AbstractCartPos,Nt::Int64,
+	     geo::CuboidRoom,env::AcEnv;
 	     N::Array{Int64,1} = [0;0;0], Tw::Int64 = 20,Fc::Float64 = 0.9)
 	     
 	if(any(xs.pos.>[geo.Lx;geo.Ly;geo.Ly]) || any(xs.pos.<[0;0;0])) error("xs outside domain") end
 	if(any(xr.pos.>[geo.Lx;geo.Ly;geo.Ly]) || any(xr.pos.<[0;0;0])) error("xr outside domain") end
 	if(any(N.< 0)) error("N should be positive") end
+	if(xs.Nm>1) error("not implemented for multichannel sources 
+		             unless sources signals are specified 
+			     e.g. rim(s,xs,xr,geo,env)") end
 
 	L  =  [geo.Lx;geo.Ly;geo.Ly]./env.c*env.Fs*2  #convert dimensions to indices
 	xr = xr.pos./env.c*env.Fs

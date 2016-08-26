@@ -75,7 +75,7 @@ Nt = round(Int64,Fs/2);                 #time samples (1/5 sec)
 ```
 Now type:
 ```julia
-h = rim(env,Nt,xr,xs,geo);
+h = rim(xs,xr,Nt,geo,env);
 ```
 to obtain your room impulse response.
 
@@ -118,7 +118,7 @@ The function `rim` has the default additional parameters:
 
 One can change this by typing:
 ```julia
-rim(env,Nt,xr,xs,geo; N = myN, Tw = myTw, Fc = myFc)
+rim(xs,xr,Nt,geo,env; N = myN, Tw = myTw, Fc = myFc)
 ```
 
 

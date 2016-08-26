@@ -19,10 +19,10 @@ geo2 = CuboidRoom(Lx,Ly,Lz,0.9*ones(6); Rd = 0.)
 show(geo)
 
 ## generate IR with frequency dependent β
-@time h  = rim(env,Nt,xr,xs,geo; N = [4;4;4])
+@time h  = rim(xs,xr,Nt,geo,env; N = [4;4;4])
 #
 ## generate another IR with frequency independent β
-@time h2 = rim(env,Nt,xr,xs,geo2; N = [4;4;4])
+@time h2 = rim(xs,xr,Nt,geo2,env; N = [4;4;4])
 
 #using PyPlot
 #t = linspace(0,Nt*1/Fs,Nt)

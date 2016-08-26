@@ -5,6 +5,7 @@ immutable LinearGrid <:AbstractCartPos
 	Nx::Int64            #mics on x direction
 	Ny::Int64            #mics on y direction
 	Nz::Int64            #mics on z direction
+	Nm::Int64            #total num of mic
 	X::Float64           #distance between mics
 	Y::Float64           #distance between mics
 	Z::Float64           #distance between mics
@@ -17,7 +18,7 @@ immutable LinearGrid <:AbstractCartPos
 		if X<0  error("X must be positive") end
 		if Y<0  error("Y must be positive") end
 		if Z<0  error("Y must be positive") end
-		new(pos,xc,Nx,Ny,Nz,X,Y,Z)
+		new(pos,xc,Nx,Ny,Nz,Nx*Ny*Nz,X,Y,Z)
 	end
 
 end
@@ -79,7 +80,7 @@ function Base.show(io::IO, f::LinearGrid)
 		@printf("dim             : %.2f x %.2f x %.2f m3 \n",f.X*f.Nx,f.Y*f.Ny,f.Z*f.Nz)
 	end
 	        @printf("center of array : [x;y;z] = [%.2f;%.2f;%.2f]\n",f.xc[1],f.xc[2],f.xc[3])
-	        println("number of pos   : $(f.Nx*f.Ny*f.Nz)")
+	        println("number of pos   : $(f.Nm)")
  
 	
 end

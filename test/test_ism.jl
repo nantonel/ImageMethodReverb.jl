@@ -5,7 +5,9 @@ using RIM
 Fs = 4e4            # Sampling frequency
 env = AcEnv(Fs)   # create new acoustic env with default values
 Nt = round(Int64,4E4/4)    # Number of time samples, 0.25 secs
-xs = [2;1.5;1]      # Source position
+xs = [2 1.5 1;
+      3 3   3]'      # Source position
+s = randn(Nt,size(xs,2))
 #xr = [1 2   2  ;
 #      1 2.3 2.3]'   # Receiver position
 
@@ -17,20 +19,21 @@ geo = CuboidRoom(Lx,Ly,Lz,T60)
 show(geo)
 
 Tw = 20              # samples of Low pass filter 
-Fc = 0.9            # cut-off frequency
+Fc = 0.9             # cut-off frequency
 
 # generate IR with new randomization
-@time h  = rim(env,Nt,xr,xs,geo)
+@time h  = rim(s,xs,xr,Nt,geo,env;N=[3;3;3])
 
 # generate another IR with same randomization and
-@time h2 = rim(env,Nt,xr,xs,geo)
+@time h2 = rim(s,xs,xr,Nt,geo,env;N=[3;3;3])
 
 @test norm(h[:]-h2[:]) < 1e-8
 println("randomization test passed")
 
 # test without fractional delays
 # original image source method
-@time h2 = rim(env,Nt,xr,xs,geo; Tw = 0, Fc = 0.)
+xs = [1.;1.;1.]
+@time h2 = rim(xs,xr,Nt,geo,env; Tw = 0, Fc = 0.)
 
 #using PyPlot
 #t = linspace(0,Nt*1/Fs,Nt)

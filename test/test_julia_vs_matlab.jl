@@ -19,7 +19,7 @@ Tw = 40            # samples of Low pass filter
 Fc = 0.9           # cut-off frequency
 
 # generate IR with randomization
-@time h  = rim(env,Nt,xr,xs,geo; Tw = Tw, Fc = Fc)
+@time h  = rim(xs,xr,Nt,geo,env; Tw = Tw, Fc = Fc)
 
 using MAT
 file = matopen("../src/MATLAB/h_mat.mat")
