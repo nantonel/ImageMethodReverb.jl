@@ -2,8 +2,8 @@
 
 
 [![Build Status](https://travis-ci.org/nantonel/RIM.jl.svg?branch=master)](https://travis-ci.org/nantonel/RIM.jl.svg?branch=master)
-[![Coverage Status](https://coveralls.io/repos/github/nantonel/RIM.jl/badge.svg?branch=master)](https://coveralls.io/github/nantonel/RIM.jl?branch=master)
 [![Build status](https://ci.appveyor.com/api/projects/status/j52r0fu5cl0ip0ed?svg=true)](https://ci.appveyor.com/project/nantonel/rim-jl)
+[![Coverage Status](https://coveralls.io/repos/github/nantonel/RIM.jl/badge.svg?branch=master)](https://coveralls.io/github/nantonel/RIM.jl?branch=master)
 
 Room Acoustics Impulse Response Generator using the Randomized Image Method (RIM)
 
@@ -22,31 +22,41 @@ Once the package is installed you can update it along with the others issuing `P
 ## Usage 
 
 Import the package by typing `using RIM`. 
-First you need to specify the dimensions of the cuboid room and acoustic properties by typing: 
+First you need to specify an acoustic environment 
+and sampling frequency: 
 ```julia
 using RIM
+Fs = 8e3          # sampling frequency
+env = AcEnv(Fs)   # create new acoustic env with default values
+```
+by default the speed of sound is chosen to be 343 m/s.
+You can change this using `AcEnv(Fs,c)`
+where `c` is the speed of sound you want.
+Create the geometry of the room  by typing: 
+```julia
 Lx,Ly,Lz = 4.,5.,3.;
-T60 = 0.5;
+T60 = 0.7;
 geo = CuboidRoom(Lx,Ly,Lz,T60);
 ```
 where `Lx`,`Ly`,`Lz` are the room 
 dimensions in meters and `T60` 
 is the desired reverberation time. 
-All the wall surfaces will 
+If you do so, all the walls will 
 have the same reflection coefficient β.
 Alternatively you can specify the reflection 
-coefficient β using a 6 element Array:
+coefficient β for each wall using a 6 element Array:
 ```julia
-β = [0.9;0.9;0.7;0.7;0.8;0.8];
+β = [0.9;0.9;0.7;0.7;0.8;0.8]; #[   βx1    ;    βx2   ;    βy1   ;    βy2    ;  βz1 ;   βz2  ]
+                               #[front wall; rear wall; left wall; right wall; floor; ceiling]
 geo = CuboidRoom(Lx,Ly,Lz,β);
 ```
 You can also use frequency 
 dependent reflection coefficients 
-by specifying a IIR filter.
+by specifying an IIR filter.
 ```julia
 b = [0.64;  -0.78;   0.14] 
 a = [ 1.0;  -1.43;   0.44]
-NT = 500;                       #number of samples for which the convolution with IIR is truncated
+NT = 100;                       #number of samples for which the convolution with IIR is truncated
 geo = CuboidRoomFD(Lx,Ly,Lz,b,a,NT);
 ```
 Notice that frequency dependent 
@@ -61,17 +71,16 @@ sampling frequency:
 ```julia
 xs = [0.5 0.5 0.5]';                    #src pos (in meters)
 xr = [Lx-0.1 Ly-0.3 Lz-0.2; 2. 2. 2.]'; #mic pos
-Fs = 4e4;                               #Sampling Frequency
-Nt = round(Int64,Fs/4);                 #time samples (1 sec)
+Nt = round(Int64,Fs/2);                 #time samples (1/5 sec)
 ```
 Now type:
 ```julia
-h = rim(Fs,Nt,xr,xs,geo);
+h = rim(env,Nt,xr,xs,geo);
 ```
 to obtain your room impulse response.
 
 
-## Changing default parameters
+## Changing default parameters with Keyword Arguments
 
 
 ### `CuboidRoom`
@@ -102,7 +111,6 @@ The function `CuboidRoomFD` has the same default additional parameters as `Cuboi
 
 The function `rim` has the default additional parameters:
 
-* `c = 343.`         : Speed of sound
 * `N = [0;0;0]`      : 3 element `Array` representing order of reflection 
                                 (set to [0;0;0] to compute full order).
 * `Tw = 20`          : taps of fractional delay filter
@@ -110,7 +118,7 @@ The function `rim` has the default additional parameters:
 
 One can change this by typing:
 ```julia
-rim(Fs,Nt,xr,xs,geo; c = myc, N = myN, Tw = myTw, Fc = myFc)
+rim(env,Nt,xr,xs,geo; N = myN, Tw = myTw, Fc = myFc)
 ```
 
 

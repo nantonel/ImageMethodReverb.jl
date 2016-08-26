@@ -2,7 +2,7 @@ using RIM
 #testing frequency dependent boundaries
 
 Fs = 8E3            # Sampling frequency
-env = AcEnv(Fs)   # create new acoustic env with default values
+env = AcEnv(Fs,340.)       # create new acoustic env with speed of sound 340
 Nt = round(Int64,4E4/8)    # Number of time samples, 0.25 secs
 xs = [2.;1.5;1.]      # Source position
 xr = [1. 2.  2.]'   # Receiver position
@@ -13,7 +13,10 @@ b = [0.64;  -0.78;   0.14]
 a = [ 1.0;  -1.43;   0.44]
 
 geo = CuboidRoomFD(Lx,Ly,Lz,b,a,500; Rd = 0.)
+geo = CuboidRoomFD(Lx,Ly,Lz,repmat(b,1,6),repmat(a,1,6),500; Rd = 0.)
 geo2 = CuboidRoom(Lx,Ly,Lz,0.9*ones(6); Rd = 0.)
+#test show
+show(geo)
 
 ## generate IR with frequency dependent β
 @time h  = rim(env,Nt,xr,xs,geo; N = [4;4;4])

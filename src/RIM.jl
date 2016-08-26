@@ -4,8 +4,6 @@ module RIM
 
 abstract LinearAcoustics
 abstract AcousticEnvironment <:LinearAcoustics
-abstract AbstractGeometry    <:LinearAcoustics
-abstract AbstractCartPos     <:LinearAcoustics
 
 
 include("acenvironment.jl")

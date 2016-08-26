@@ -13,6 +13,8 @@ Lx,Ly,Lz  = 4.,4.,4.# Room dimensions
 xr = LinearGrid([Lx/2,Ly/2,Lz/2],[0.5],3) #3 mic linear array positioned at the center of the room
 T60 = 1.0           # Reverberation Time
 geo = CuboidRoom(Lx,Ly,Lz,T60)
+#test printing
+show(geo)
 
 Tw = 20              # samples of Low pass filter 
 Fc = 0.9            # cut-off frequency
@@ -24,6 +26,11 @@ Fc = 0.9            # cut-off frequency
 @time h2 = rim(env,Nt,xr,xs,geo)
 
 @test norm(h[:]-h2[:]) < 1e-8
+println("randomization test passed")
+
+# test without fractional delays
+# original image source method
+@time h2 = rim(env,Nt,xr,xs,geo; Tw = 0, Fc = 0.)
 
 #using PyPlot
 #t = linspace(0,Nt*1/Fs,Nt)

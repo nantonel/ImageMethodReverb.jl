@@ -38,7 +38,7 @@ immutable CuboidRoomFD <: AbstractGeometry
 		if(NT< 0) error("NT must be positive") end
 		if(Sr < 0) error("Sr must be positive") end
 		if(size(b,2) != 6 || size(a,2) != 6) 
-			error("size of βfir must be either (n,) or (n,6)") 
+			error("size of b and a must be either (n,) or (n,6)") 
 		end
 
 		new(Lx,Ly,Lz,b,a,NT,Rd,Sr)
@@ -47,14 +47,19 @@ immutable CuboidRoomFD <: AbstractGeometry
 
 end
 
-#random displacement single βfir input
+#with kwargs single impedance
 CuboidRoomFD(Lx::Float64,Ly::Float64,Lz::Float64,
 		      b::Array{Float64,1},a::Array{Float64,1},NT::Int64;  
 		      Rd::Float64 = 1e-2, Sr::Int64 = rand(1:10000) ) = 
 CuboidRoomFD(Lx,Ly,Lz,repmat(b,1,6),repmat(a,1,6),NT,Rd,Sr)
 
-#random displacement single βfir input
+#with kwargs
 CuboidRoomFD(Lx::Float64,Ly::Float64,Lz::Float64,
 	     b::Array{Float64,2},a::Array{Float64,2},NT::Int64;  
 	     Rd::Float64 = 1e-2, Sr::Int64 = rand(1:10000) ) = 
 CuboidRoomFD(Lx,Ly,Lz,b,a,NT,Rd,Sr)
+
+fun_name(f::CuboidRoomFD) = "cuboid room"
+fun_dim(f::CuboidRoomFD) = @sprintf("Lx x Ly x Lz = %.2f x %.2f x %.2f", f.Lx, f.Ly, f.Lz)
+fun_β(f::CuboidRoomFD) = "frequency dependent"
+fun_Rd(f::CuboidRoomFD) = "$(f.Rd) "

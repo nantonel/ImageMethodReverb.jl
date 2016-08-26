@@ -61,3 +61,24 @@ function get_β(Lx::Float64,Ly::Float64,Lz::Float64,T60::Float64)
 	β =-sqrt(abs(1-α)).*ones(6) # Reflection coefficient
 	return β
 end
+
+
+fun_name(f::CuboidRoom) = "cuboid room"
+fun_dim(f::CuboidRoom) = @sprintf("Lx x Ly x Lz = %.2f x %.2f x %.2f", f.Lx, f.Ly, f.Lz)
+fun_β(f::CuboidRoom) =
+@sprintf("frequency independent   \n\n | βx1  | βx2  | βy1  | βy2  | βz1  | βz2  | \n | % 01.2f| % 01.2f| % 01.2f| % 01.2f| % 01.2f| % 01.2f|\n" , f.β[1],f.β[2],f.β[3],f.β[4],f.β[5],f.β[6])
+fun_Rd(f::CuboidRoom) = "$(f.Rd) \n"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
