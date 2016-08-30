@@ -36,7 +36,7 @@ Create the geometry of the room  by typing:
 ```julia
 Lx,Ly,Lz = 4.,5.,3.;
 T60 = 0.7;
-geo = CuboidRoom(Lx,Ly,Lz,T60);
+geo = CuboidRoom(Lx,Ly,Lz,T60,env);
 ```
 where `Lx`,`Ly`,`Lz` are the room 
 dimensions in meters and `T60` 
@@ -88,16 +88,16 @@ to obtain your room impulse response.
 
 The function `CuboidRoom` has the default additional parameters: 
 
-* `Rd = 1e2`: random displacement of image sources.
+* `Rd = 1e-2`: random displacement of image sources.
 * `Sr`: seed of the randomization which by default is a random integer.
 
 One can change this by typing:
 ```julia
-CuboidRoom(Lx,Ly,Lz,T60,Rd = myRd, Sr = mySr)
+CuboidRoom(Lx,Ly,Lz,T60,env; Rd = myRd, Sr = mySr)
 ```
 or 
 ```julia
-CuboidRoom(Lx,Ly,Lz,β,Rd = myRd, Sr = mySr)
+CuboidRoom(Lx,Ly,Lz,β; Rd = myRd, Sr = mySr)
 ```
 
 ### `CuboidRoomFD`

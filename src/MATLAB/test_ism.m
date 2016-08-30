@@ -7,7 +7,7 @@ xr = [1 2   2  ; ...
       1 2.3 2.3]';   % Receiver position
 L  = [4;4;4];        % Room dimensions
 N =  [ 0;0;0];       % Reflection order
-T60 = 1.0;            % Reverberation Time
+T60 = 0.25;            % Reverberation Time
 beta = -0.93.*ones(6,1);% Reflection coefficient
 
 Tw = 20;            % samples of Low pass filter 

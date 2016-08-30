@@ -29,7 +29,7 @@ function [h,Sr] =  ISM(xr,xs,L,beta,N,Nt,Rd,Sr,Tw,Fc,Fs,c)
 	if(length(beta) == 1)  % T60 is in input and is converted to β 
 		S = 2*( L(1)*L(2)+L(1)*L(3)+L(2)*L(3) ); % Total surface area
 		V = prod(L);
-		alpha = -10^(-0.161*V/(beta*S))+1; % Absorption coefficient
+		alpha = 1-exp(-(24*V*log(10))/(c*beta*S)); % Absorption coefficient
 		beta =-sqrt(abs(1-alpha)).*ones(6,1); % Reflection coefficient
 	end
 
