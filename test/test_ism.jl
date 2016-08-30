@@ -1,4 +1,5 @@
 using RIM
+using Base.Test
 #include("../src/rim.jl")
 #testing seed is preserved
 
@@ -25,14 +26,19 @@ println("testing β for a given T60 gives correct T60")
 rt,edc = revTime(h,env)
 @test norm(rt-T60)/norm(T60)< 0.25 #testing rev time
 
-
 println("testing seed for randomization is preserved and multi source")
 xr = LinearGrid([Lx/2;Ly/2;Lz/2],[0.5],3) #3 mic linear array positioned at the center of the room
 xs = SphFib([Lx/2;Ly/2;Lz/2],0.9*Lz/2,5)
 s = randn(Nt,xs.Nm)
 @time h = rim(s,xs,xr,Nt,geo,env;N=[3;3;3])
 ## generate another IR with same randomization and
-@time h2 = rim(s,xs,xr,Nt,geo,env;N=[3;3;3])
+h2 = zeros(Nt,xr.Nm)
+for i = 1:xs.Nm 
+	hh = rim(xs.pos[:,i],xr,Nt,geo,env;N=[3;3;3])
+	for ii = 1:xr.Nm
+		h2[:,ii] += conv(s[:,i],hh[:,ii])[1:Nt]
+	end
+end
 @test norm(h[:]-h2[:]) < 1e-8
 
 ## original image source method

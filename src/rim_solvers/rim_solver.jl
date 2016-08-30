@@ -3,11 +3,12 @@ Randomized Image Source Method
 
 # Arguments: 
 
-* `env::AcEnv`          : Acustic environment 
-* `Nt::Int64`           : Time samples
+* `s::Array{Float64}`   : (Optional) Source signals
 * `xs::Array{Float64}`  : Source positions (in meters) (3 by Nm `Array`) where Nm is number of microphones
-* `xr::Array{Float64}`  : Microphone positions (in meters) (must be a 3 by 1 `Array`)
+* `xr::Array{Float64}`  : Microphone positions (in meters) (must be a 3 by Ns `Array`)
+* `Nt::Int64`           : Time samples
 * `geo::cuboidRoom`     : object containing dimensions, acoustic properties and random displacement of image sources of the room 
+* `env::AcEnv`          : Acustic environment 
 
 
 # Optional parameters:
@@ -20,7 +21,8 @@ Randomized Image Source Method
 
 # Outputs: 
 * `h::Array{Float64}`: `h` is a matrix where each column 
-		       corresponts to the impulse response of 
+		       corresponts to the impulse response,
+		       or the sound pressure if `s` was specified, at 
 		       the microphone positions `xr`
 """
 
