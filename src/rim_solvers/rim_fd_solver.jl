@@ -4,8 +4,8 @@ function rim(xs::AbstractCartPos,xr::AbstractCartPos,Nt::Int64,
 	     geo::CuboidRoomFD,env::AcEnv;
 	     N::Array{Int64,1} = [0;0;0], Tw::Int64 = 20,Fc::Float64 = 0.9)
 	     
-	if(any(xs.pos.>[geo.Lx;geo.Ly;geo.Ly]) || any(xs.pos.<[0;0;0])) error("xs outside domain") end
-	if(any(xr.pos.>[geo.Lx;geo.Ly;geo.Ly]) || any(xr.pos.<[0;0;0])) error("xr outside domain") end
+	if(any(xs.pos.>[geo.Lx;geo.Ly;geo.Lz]) || any(xs.pos.<[0;0;0])) error("xs outside domain") end
+	if(any(xr.pos.>[geo.Lx;geo.Ly;geo.Lz]) || any(xr.pos.<[0;0;0])) error("xr outside domain") end
 	if(any(N.< 0)) error("N should be positive") end
 	if(Tw == 0) error("freq dep rim not implemented without fractional delays") end
 	if(xs.Nm>1) error("not implemented for multichannel sources 
