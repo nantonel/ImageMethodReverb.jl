@@ -1,7 +1,7 @@
 export CuboidRoom,
        CuboidRoomFD 
 
-abstract AbstractGeometry    <:LinearAcoustics
+abstract type AbstractGeometry <: LinearAcoustics end
 
 include("cuboidRoom/cuboidRoom.jl")
 include("cuboidRoom/cuboidRoomFD.jl")

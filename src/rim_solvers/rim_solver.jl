@@ -47,7 +47,7 @@ function rim(xs::AbstractCartPos,xr::AbstractCartPos,Nt::Int64,
 	h = zeros(Float64,Nt,K)            # initialize output
 
 	if(N == [0,0,0])
-		N = floor(Int64,Nt./L)+1  # compute full order
+		N .= floor.(Int64,Nt./L)+1  # compute full order
 	end
 
 	for k = 1:K
@@ -63,7 +63,7 @@ function rim(xs::AbstractCartPos,xr::AbstractCartPos,Nt::Int64,
 				xs[3]-2*w*xs[3]+n*L[3]
 				]                         #position of image source
 				
-				rand_disp = Rd*(2*rand(3)-1)*norm(sum(abs([u;v;w;l;m;n])),0)
+				rand_disp = Rd*(2*rand(3)-1)*norm(sum(abs.([u;v;w;l;m;n])),0)
 				d = norm(pos_is+rand_disp-xr[:,k])+1
 
 				# when norm(sum(abs( [u,v,w,l,m,n])),0) == 0 
@@ -87,11 +87,11 @@ function rim(xs::AbstractCartPos,xr::AbstractCartPos,Nt::Int64,
 				maximum([ceil(Int64,d-Tw/2),1]):minimum([floor(Int64,d+Tw/2),Nt])
 				               )
 					# create time window
-					s = (1+cos(2*π*(indx-d)/Tw)).*sinc(Fc*(indx-d))/2
+					s = (1+cos.(2*π*(indx-d)/Tw)).*sinc.(Fc*(indx-d))/2
 					# compute filtered impulse
 				end
 	
-				A = prod(geo.β.^abs([l-u,l,m-v,m,n-w,n]))/(4*π*(d-1))
+				A = prod(geo.β.^abs.([l-u,l,m-v,m,n-w,n]))/(4*π*(d-1))
 				h[indx,k] = h[indx,k] + s.*A
 			end
 		end

@@ -1,6 +1,6 @@
 export LinearGrid, SphFib
 
-abstract AbstractCartPos     <:LinearAcoustics
+abstract type AbstractCartPos <:LinearAcoustics end
 
 immutable CartPos <:AbstractCartPos
 	pos::Array{Float64}

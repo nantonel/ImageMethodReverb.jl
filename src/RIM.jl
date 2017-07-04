@@ -2,8 +2,8 @@ __precompile__()
 
 module RIM
 
-abstract LinearAcoustics
-abstract AcousticEnvironment <:LinearAcoustics
+abstract type LinearAcoustics end
+abstract type AcousticEnvironment <:LinearAcoustics end
 
 
 include("acenvironment.jl")

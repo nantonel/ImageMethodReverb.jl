@@ -22,10 +22,10 @@ immutable SphFib <:AbstractCartPos
 			θ[i] = mod(θ[i],2*π) 
 			z[i] = z[i-1]-Δz
 		end
-		ϕ = acos(z)
+		ϕ = acos.(z)
 
-		x = cos(θ) .* sin(ϕ)
-		y = sin(θ) .* sin(ϕ)
+		x = cos.(θ) .* sin.(ϕ)
+		y = sin.(θ) .* sin.(ϕ)
 		pos = r.*[x y z]'.+xc #multiply by radius and translate to center
 		X = max_nearest_neigh(Nm,pos)
 
