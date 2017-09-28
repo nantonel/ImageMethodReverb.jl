@@ -1,20 +1,20 @@
 #implementation with frequency dependent boundaries
 
-function rim(xs::AbstractCartPos,xr::AbstractCartPos,Nt::Int64,
+function rim(xs::Array{Float64},xr::Array{Float64},Nt::Int64,
 	     geo::CuboidRoomFD,env::AcEnv;
 	     N::Array{Int64,1} = [0;0;0], Tw::Int64 = 20,Fc::Float64 = 0.9)
 	     
-	if(any(xs.pos.>[geo.Lx;geo.Ly;geo.Lz]) || any(xs.pos.<[0;0;0])) error("xs outside domain") end
-	if(any(xr.pos.>[geo.Lx;geo.Ly;geo.Lz]) || any(xr.pos.<[0;0;0])) error("xr outside domain") end
+	if(any(xs.>[geo.Lx;geo.Ly;geo.Lz]) || any(xs.<[0;0;0])) error("xs outside domain") end
+	if(any(xr.>[geo.Lx;geo.Ly;geo.Lz]) || any(xr.<[0;0;0])) error("xr outside domain") end
 	if(any(N.< 0)) error("N should be positive") end
 	if(Tw == 0) error("freq dep rim not implemented without fractional delays") end
-	if(xs.Nm>1) error("not implemented for multichannel sources 
+	if(size(xs,2) > 1) error("not implemented for multichannel sources 
 		             unless sources signals are specified 
 			     e.g. rim(s,xs,xr,geo,env)") end
 
 	L  =  [geo.Lx;geo.Ly;geo.Ly]./env.c*env.Fs*2  #convert dimensions to indices
-	xr = xr.pos./env.c*env.Fs
-	xs = xs.pos./env.c*env.Fs
+	xr = xr./env.c*env.Fs
+	xs = xs./env.c*env.Fs
 	Rd = geo.Rd./env.c*env.Fs
 
 	K = size(xr,2)        #number of microphones

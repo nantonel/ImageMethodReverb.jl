@@ -27,16 +27,16 @@ rt,edc = revTime(h,env)
 @test norm(rt-T60)/norm(T60)< 0.25 #testing rev time
 
 println("testing seed for randomization is preserved and multi source")
-xr = LinearGrid([Lx/2;Ly/2;Lz/2],[0.5],2) #2 mic linear array positioned at the center of the room
-xs = SphFib([Lx/2;Ly/2;Lz/2],0.9*Lz/2,2)
+xr = [[Lx+0.5,Ly,Lz]./2 [Lx-0.5,Ly,Lz]./2] #2 mic linear array positioned at the center of the room
+xs = [0.9.*[Lx/8,Ly/8,Lz/2] 0.8.*[3/4*Lx,Ly,Lz/2]] 
 Nt = round(Int64,0.03*Fs)    # Number of time samples, 0.25 secs
-s = randn(Nt,xs.Nm)
+s = randn(Nt,size(xs,2))
 @time h = rim(s,xs,xr,Nt,geo,env;N=[2;2;2])
 ## generate another IR with same randomization and
-h2 = zeros(Nt,xr.Nm)
-for i = 1:xs.Nm 
-	hh = rim(xs.pos[:,i],xr,Nt,geo,env;N=[2;2;2])
-	for ii = 1:xr.Nm
+h2 = zeros(Nt,size(xr,2))
+for i = 1:size(xs,2) 
+	hh = rim(xs[:,i],xr,Nt,geo,env;N=[2;2;2])
+	for ii = 1:size(xr,2)
 		h2[:,ii] += conv(s[:,i],hh[:,ii])[1:Nt]
 	end
 end
