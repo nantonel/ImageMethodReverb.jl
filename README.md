@@ -5,8 +5,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/j52r0fu5cl0ip0ed?svg=true)](https://ci.appveyor.com/project/nantonel/rim-jl)
 [![Coverage Status](https://coveralls.io/repos/github/nantonel/RIM.jl/badge.svg?branch=master)](https://coveralls.io/github/nantonel/RIM.jl?branch=master)
 
-Room Acoustics Impulse Response Generator using the Randomized Image Method (RIM)
-
+Room acoustics impulse response generator using the Randomized Image Method (RIM)
 
 ## Installation
 
@@ -147,7 +146,7 @@ rim(xs,xr,Nt,geo,env; N = myN, Tw = myTw, Fc = myFc)
 A single channel MATLAB implementation of the RIM can be found in:
 [http://www.desena.org/sweep/](http://www.desena.org/sweep/)
 
-A less efficient MATLAB multi-channel version can be found here in the MATLAB folder with the similar code structure as in the Julia version.
+A multi-channel MATLAB version can be found [src/MATLAB folder](https://github.com/nantonel/RIM.jl/tree/master/src/MATLAB).
 
 
 ## References
@@ -155,7 +154,6 @@ A less efficient MATLAB multi-channel version can be found here in the MATLAB fo
 1. [E. De Sena, N. Antonello, M. Moonen, and T. van Waterschoot, "On the Modeling of
 Rectangular Geometries in Room Acoustic Simulations", IEEE Transactions of Audio, Speech
 Language Processing, vol. 21, no. 4, April 2015.](http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=7045580)
-
 
 
 ## Credits
