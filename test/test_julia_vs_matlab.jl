@@ -1,10 +1,5 @@
-#include("../src/rim.jl")
-#using RIM
-
 # testing output of this implementation with the one 
 # of Enzo de Sena: http://www.desena.org/sweep/ 
-
-
 Fs = 4e4            # Sampling frequency
 env = AcEnv(Fs)   # create new acoustic env with default values
 Nt = round(Int64,4E4/4)   # Number of time samples
@@ -21,16 +16,6 @@ Fc = 0.9           # cut-off frequency
 # generate IR with randomization
 @time h  = rim(xs,xr,Nt,geo,env; Tw = Tw, Fc = Fc)
 
-using MAT
-file = matopen("../src/MATLAB/h_mat.mat")
-hm = read(file, "h_matlab")
-close(file)
+hm = readdlm("h.txt")
 @test norm(hm-h)<1e-8
 println("matlab reference test passed")
-
-#using PyPlot
-#figure()
-#plot(h)
-#plot(hm)
-
-
