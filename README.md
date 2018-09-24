@@ -8,14 +8,11 @@ Room acoustics impulse response generator using the Randomized Image Method (RIM
 
 ## Installation
 
-From the Julia command line hit:
+To install the package, hit `]` from the Julia command line to enter the package manager, then
 
 ```julia
-Pkg.clone("https://github.com/nantonel/RIM.jl.git")
+pkg> add https://github.com/nantonel/RIM.jl.git
 ```
-
-Once the package is installed you can update it along with the others issuing `Pkg.update()` in the command line.
-
 
 ## Usage 
 

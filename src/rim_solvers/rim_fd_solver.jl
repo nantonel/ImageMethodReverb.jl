@@ -21,8 +21,8 @@ function rim(xs::AbstractArray,xr::AbstractArray,Nt::Int64,
 
 	h = zeros(Float64,Nt,K)            # initialize output
 
-	if(N == [0,0,0])
-		N = floor(Int64,Nt./L)+1  # compute full order
+	if N == [0,0,0]
+		N .= floor.(Int64,Nt./L).+1  # compute full order
 	end
 
 	for k = 1:K
