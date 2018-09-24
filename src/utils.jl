@@ -2,8 +2,8 @@ export revTime
 #TODO make this more robust
 function revTime(h,env)
 
-	cs = cumsum(flipdim(h.^2,1))
-	edc = 10*log10.(flipdim(cs./cs[end],1)) #energy decay curve
+	cs = cumsum(reverse(h.^2, dims = 1), dims = 1)
+	edc = 10*log10.(reverse(cs./cs[end], dims = 1)) #energy decay curve
 
 	rt = zeros(Float64,size(h,2))
 	for i = 1:size(h,2)

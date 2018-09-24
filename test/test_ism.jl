@@ -1,6 +1,3 @@
-using RIM
-using Base.Test
-#include("../src/rim.jl")
 #testing seed is preserved
 
 Fs = 4e4                    # Sampling frequency
@@ -9,8 +6,8 @@ Nt = round(Int64,0.1*Fs)    # Number of time samples, 0.25 secs
 Lx,Ly,Lz  = 4.,4.,4.# Room dimensions
 xs = [2 1.5 1]'      # Source position
 s = randn(Nt,size(xs,2))
-s = zeros(s)
-s[1,:] = 1
+s = fill!(similar(s), 0)
+s[1,:] .= 1
 xr = [1. 2. 2. ]'   # Receiver position
 
 T60 = .1           # Reverberation Time
@@ -23,8 +20,8 @@ Fc = 0.9             # cut-off frequency
 
 println("testing β for a given T60 gives correct T60")
 @time h  = rim(xs,xr,Nt,geo,env; N = [4;4;4])
-rt,edc = revTime(h,env)
-@test norm(rt-T60)/norm(T60)< 0.25 #testing rev time
+rt, edc = revTime(h,env)
+@test norm(rt.-T60)/norm(T60)< 0.25 #testing rev time
 
 println("testing seed for randomization is preserved and multi source")
 xr = [[Lx+0.5,Ly,Lz]./2 [Lx-0.5,Ly,Lz]./2] #2 mic linear array positioned at the center of the room

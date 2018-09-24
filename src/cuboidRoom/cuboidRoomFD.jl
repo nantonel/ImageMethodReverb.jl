@@ -19,7 +19,7 @@ To change these default values type:
 * `cuboidRoom(Lx,Ly,Lz,T60,Rd = myRd, Sr = mySr)`
 
 """
-immutable CuboidRoomFD <: AbstractGeometry
+struct CuboidRoomFD <: AbstractGeometry
 	Lx::Float64   #x dimension
 	Ly::Float64   #y dimension
 	Lz::Float64   #z dimension
@@ -51,7 +51,7 @@ end
 CuboidRoomFD(Lx::Float64,Ly::Float64,Lz::Float64,
 		      b::Array{Float64,1},a::Array{Float64,1},NT::Int64;  
 		      Rd::Float64 = 1e-2, Sr::Int64 = rand(1:10000) ) = 
-CuboidRoomFD(Lx,Ly,Lz,repmat(b,1,6),repmat(a,1,6),NT,Rd,Sr)
+CuboidRoomFD(Lx,Ly,Lz,repeat(b,1,6),repeat(a,1,6),NT,Rd,Sr)
 
 #with kwargs
 CuboidRoomFD(Lx::Float64,Ly::Float64,Lz::Float64,

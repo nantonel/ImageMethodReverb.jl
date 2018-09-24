@@ -29,7 +29,7 @@ To change these default values type:
 
 
 """
-immutable CuboidRoom <: AbstractGeometry
+struct CuboidRoom <: AbstractGeometry
 	Lx::Float64   #x dimension
 	Ly::Float64   #y dimension
 	Lz::Float64   #z dimension
@@ -80,17 +80,3 @@ fun_dim(f::CuboidRoom) = @sprintf("Lx x Ly x Lz = %.2f x %.2f x %.2f", f.Lx, f.L
 fun_β(f::CuboidRoom) =
 @sprintf("frequency independent   \n\n | βx1  | βx2  | βy1  | βy2  | βz1  | βz2  | \n | % 01.2f| % 01.2f| % 01.2f| % 01.2f| % 01.2f| % 01.2f|\n" , f.β[1],f.β[2],f.β[3],f.β[4],f.β[5],f.β[6])
 fun_Rd(f::CuboidRoom) = "$(f.Rd) \n"
-
-
-
-
-
-
-
-
-
-
-
-
-
-

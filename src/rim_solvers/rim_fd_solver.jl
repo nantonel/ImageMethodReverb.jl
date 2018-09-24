@@ -1,8 +1,8 @@
 #implementation with frequency dependent boundaries
 
-function rim(xs::Array{Float64},xr::Array{Float64},Nt::Int64,
-	     geo::CuboidRoomFD,env::AcEnv;
-	     N::Array{Int64,1} = [0;0;0], Tw::Int64 = 20,Fc::Float64 = 0.9)
+function rim(xs::AbstractArray,xr::AbstractArray,Nt::Int64,
+             geo::CuboidRoomFD, env::AcEnv;
+             N::Array{Int64,1} = [0;0;0], Tw::Int64 = 20,Fc::Float64 = 0.9)
 	     
 	if(any(xs.>[geo.Lx;geo.Ly;geo.Lz]) || any(xs.<[0;0;0])) error("xs outside domain") end
 	if(any(xr.>[geo.Lx;geo.Ly;geo.Lz]) || any(xr.<[0;0;0])) error("xr outside domain") end
@@ -27,7 +27,7 @@ function rim(xs::Array{Float64},xr::Array{Float64},Nt::Int64,
 
 	for k = 1:K
 	
-		srand(geo.Sr)
+		Random.seed!(geo.Sr)
 		for u = 0:1, v = 0:1, w = 0:1
 			for l = -N[1]:N[1], m = -N[2]:N[2], n = -N[3]:N[3]
 	
@@ -38,7 +38,7 @@ function rim(xs::Array{Float64},xr::Array{Float64},Nt::Int64,
 				xs[3]-2*w*xs[3]+n*L[3]
 				]                         #position of image source
 				
-				rand_disp = Rd*(2*rand(3)-1)*norm(sum(abs.([u;v;w;l;m;n])),0)
+				rand_disp = Rd.*(2 .*rand(3).-1)*norm(sum(abs.([u;v;w;l;m;n])),0)
 				d = norm(pos_is+rand_disp-xr[:,k])+1
 
 				# when norm(sum(abs.( [u,v,w,l,m,n])),0) == 0 
@@ -60,12 +60,12 @@ function rim(xs::Array{Float64},xr::Array{Float64},Nt::Int64,
 				# create time window
 					
 				if(norm(sum(abs.([u,v,w,l,m,n])),0)==0) #direct path
-					s = (1+cos.(2*π*(indx0-d)/Tw)).*sinc.(Fc*(indx0-d))/2
+					s = (1 .+cos.(2*π .*(indx0.-d)./Tw)).*sinc.(Fc*(indx0.-d))./2
 					# fractional filter, no convolution with βfir
 					A = 1/(4*π*(d-1))
 					h[indx0,k] = h[indx0,k] + s.*A
 				else
-					s = (1+cos.(2*π*(indx0-d)/Tw)).*sinc.(Fc*(indx0-d))/2
+					s = (1 .+cos.(2*π .*(indx0.-d)./Tw)).*sinc.(Fc.*(indx0.-d))./2
 					s = [s;zeros(Float64,max(geo.NT-Tw,1))]
 					# s will be a NT+Tw long signal
 					s = conv_βfir(s,geo,l,m,n,u,v,w)
@@ -93,7 +93,7 @@ function conv_βfir(s::Array{Float64,1},geo::CuboidRoomFD,
 		   l::Int64,m::Int64,n::Int64,u::Int64,v::Int64,w::Int64)
 
 	w_ord    = abs.([l-u,l,m-v,m,n-w,n]) #wall orders
-	act_ords = find(w_ord)            #active orders
+    act_ords = findall(x -> x!=0, w_ord)
 
 	for i = 1:length(act_ords) #for all active orders
 		for ii = 1:w_ord[act_ords[i]] #convolve s up to max order

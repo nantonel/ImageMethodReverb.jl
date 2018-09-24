@@ -3,10 +3,10 @@ Randomized Image Source Method
 
 # Arguments: 
 
-* `s::Array{Float64}`   : (Optional) Source signals
-* `xs::Array{Float64}`  : Source positions (in meters) (3 by Nm `Array`) where Nm is number of microphones
-* `xr::Array{Float64}`  : Microphone positions (in meters) (must be a 3 by Ns `Array`)
-* `Nt::Int64`           : Time samples
+* `s`   : (Optional) Source signals
+* `xs`  : Source positions (in meters) (3 by Nm array) where Nm is number of microphones
+* `xr`  : Microphone positions (in meters) (must be a 3 by Ns array)
+* `Nt`  : Time samples
 * `geo::cuboidRoom`     : object containing dimensions, acoustic properties and random displacement of image sources of the room 
 * `env::AcEnv`          : Acustic environment 
 
@@ -20,15 +20,14 @@ Randomized Image Source Method
 
 
 # Outputs: 
-* `h::Array{Float64}`: `h` is a matrix where each column 
-		       corresponts to the impulse response,
-		       or the sound pressure if `s` was specified, at 
-		       the microphone positions `xr`
+* `h: `h` is a matrix where each column 
+	corresponts to the impulse response,
+	or the sound pressure if `s` was specified, at 
+    the microphone positions `xr`
 """
-
-function rim(xs::Array{Float64},xr::Array{Float64},Nt::Int64,
-	     geo::CuboidRoom,env::AcEnv;
-	     N::Array{Int64,1} = [0;0;0], Tw::Int64 = 20,Fc::Float64 = 0.9)
+function rim(xs::AbstractArray,xr::AbstractArray,Nt::Int64,
+             geo::CuboidRoom, env::AcEnv;
+             N::Array{Int64,1} = [0;0;0], Tw::Int64 = 20,Fc::Float64 = 0.9)
 	     
 	if(any(xs.>[geo.Lx;geo.Ly;geo.Lz]) || any(xs.<[0;0;0])) error("xs outside domain") end
 	if(any(xr.>[geo.Lx;geo.Ly;geo.Lz]) || any(xr.<[0;0;0])) error("xr outside domain") end
@@ -47,12 +46,12 @@ function rim(xs::Array{Float64},xr::Array{Float64},Nt::Int64,
 	h = zeros(Float64,Nt,K)            # initialize output
 
 	if(N == [0,0,0])
-		N .= floor.(Int64,Nt./L)+1  # compute full order
+		N .= floor.(Int64,Nt./L).+1  # compute full order
 	end
 
 	for k = 1:K
 	
-		srand(geo.Sr)
+		Random.seed!(geo.Sr)
 		for u = 0:1, v = 0:1, w = 0:1
 			for l = -N[1]:N[1], m = -N[2]:N[2], n = -N[3]:N[3]
 	
@@ -63,7 +62,7 @@ function rim(xs::Array{Float64},xr::Array{Float64},Nt::Int64,
 				xs[3]-2*w*xs[3]+n*L[3]
 				]                         #position of image source
 				
-				rand_disp = Rd*(2*rand(3)-1)*norm(sum(abs.([u;v;w;l;m;n])),0)
+				rand_disp = Rd.*(2 .*rand(3).-1).*norm(sum(abs.([u;v;w;l;m;n])),0)
 				d = norm(pos_is+rand_disp-xr[:,k])+1
 
 				# when norm(sum(abs( [u,v,w,l,m,n])),0) == 0 
@@ -83,11 +82,9 @@ function rim(xs::Array{Float64},xr::Array{Float64},Nt::Int64,
 					indx = round(Int64,d) #calculate index  
 					s = 1
 				else
-					indx = (
-				maximum([ceil(Int64,d-Tw/2),1]):minimum([floor(Int64,d+Tw/2),Nt])
-				               )
+					indx = maximum([ceil(Int64,d.-Tw/2),1]):minimum([floor(Int64,d.+Tw/2),Nt])
 					# create time window
-					s = (1+cos.(2*π*(indx-d)/Tw)).*sinc.(Fc*(indx-d))/2
+					s = (1 .+cos.(2*π.*(indx.-d)./Tw)).*sinc.(Fc.*(indx.-d))./2
 					# compute filtered impulse
 				end
 	
