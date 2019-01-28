@@ -47,7 +47,7 @@ function rim(xs::NTuple{3,Number},
     if any( xr .> (L[1], L[2], L[3]) ) || any( xr .< (0, 0 , 0) ) 
         error("xr outside domain") 
     end
-	if any(N .< 0 )  
+    if any(N .< 0 )  
         error("N should be positive") 
     end
 
@@ -55,64 +55,60 @@ function rim(xs::NTuple{3,Number},
     L  = L.*(Fsc*2)  #convert dimensions to indices
     xr = xr.*Fsc
     xs = xs.*Fsc
-	Rd = Rd *Fsc
+    Rd = Rd *Fsc
 
-	h = zeros(Nt)            # initialize output
+    h = zeros(Nt)            # initialize output
     pos_is = zeros(3)
     rand_disp = zeros(3)
-
     if(N == (0,0,0))
-		N = floor.(Int,Nt./L).+1  # compute full order
-	end
-
-		Random.seed!(seed)
-		for u = 0:1, v = 0:1, w = 0:1
-			for l = -N[1]:N[1], m = -N[2]:N[2], n = -N[3]:N[3]
-	
-				# compute distance
-                pos_is[1] = xs[1]-2*u*xs[1]+l*L[1] 
-				pos_is[2] = xs[2]-2*v*xs[2]+m*L[2];
-				pos_is[3] = xs[3]-2*w*xs[3]+n*L[3]
-                #position of image source
+      N = floor.(Int,Nt./L).+1  # compute full order
+    end
+    Random.seed!(seed)
+    for u = 0:1, v = 0:1, w = 0:1
+      for l = -N[1]:N[1], m = -N[2]:N[2], n = -N[3]:N[3]
 				
-                if u+v+w+abs(l)+abs(m)+abs(n) != 0 
-                    rand_disp .= Rd.*(2 .*rand(3).-1)
-                else
-                    rand_disp .*= 0  
-                end
-				d = norm(pos_is + rand_disp .-xr[:])+1
+        # compute distance
+        pos_is[1] = xs[1]-2*u*xs[1]+l*L[1] 
+        pos_is[2] = xs[2]-2*v*xs[2]+m*L[2];
+        pos_is[3] = xs[3]-2*w*xs[3]+n*L[3]
+        
+        #position of image source
+        if u+v+w+abs(l)+abs(m)+abs(n) != 0 
+          rand_disp .= Rd.*(2 .*rand(3).-1)
+        else
+          rand_disp .*= 0  
+        end
+        d = norm(pos_is + rand_disp .-xr[:])+1
 
-				# when norm(sum(abs( [u,v,w,l,m,n])),0) == 0 
-				# we have direct path, so
-				# no displacement is added
-	
-				# instead of moving the source on a line
-				# as in the paper, we are moving the source 
-				# in a cube with 2*Rd edge
+        # when norm(sum(abs( [u,v,w,l,m,n])),0) == 0 
+        # we have direct path, so
+        # no displacement is added
 
-				if (round(Int64,d) > Nt || round(Int64,d) < 1)
-					#if index not exceed length h
-					continue
-				end
+        # instead of moving the source on a line
+        # as in the paper, we are moving the source 
+        # in a cube with 2*Rd edge
+        
+        if (round(Int64,d) > Nt || round(Int64,d) < 1)
+          #if index not exceed length h
+          continue
+        end
+				
+        if Tw == 0 
+          indx = round(Int64,d) #calculate index  
+          s = 1
+        else
+          indx = maximum([ceil(Int64,d.-Tw/2),1]):minimum([floor(Int64,d.+Tw/2),Nt])
+          # create time window
+          s = (1 .+cos.(2*π.*(indx.-d)./Tw)).*sinc.(Fc.*(indx.-d))./2
+          # compute filtered impulse
+        end
+        A = prod(beta.^abs.([l-u,l,m-v,m,n-w,n]))/(4*π*(d-1))
+        h[indx] = h[indx] + s.*A
+      end
+    end
 
-				if Tw == 0 
-					indx = round(Int64,d) #calculate index  
-					s = 1
-				else
-					indx = maximum([ceil(Int64,d.-Tw/2),1]):minimum([floor(Int64,d.+Tw/2),Nt])
-					# create time window
-					s = (1 .+cos.(2*π.*(indx.-d)./Tw)).*sinc.(Fc.*(indx.-d))./2
-					# compute filtered impulse
-				end
-	
-				A = prod(beta.^abs.([l-u,l,m-v,m,n-w,n]))/(4*π*(d-1))
-				h[indx] = h[indx] + s.*A
-			end
-		end
-
-        h .*= Fsc
-        return h, seed
-
+    h .*= Fsc
+    return h, seed
 end
 
 # with T60
