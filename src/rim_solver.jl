@@ -78,7 +78,7 @@ function rim(xs::NTuple{3,Number},
         else
           rand_disp .*= 0  
         end
-        d = norm(pos_is + rand_disp .-xr[:])+1
+        d = norm(pos_is + rand_disp .-xr)+1
 
         # when norm(sum(abs( [u,v,w,l,m,n])),0) == 0 
         # we have direct path, so
@@ -93,17 +93,18 @@ function rim(xs::NTuple{3,Number},
           continue
         end
 				
+        A = prod(beta.^abs.([l-u,l,m-v,m,n-w,n]))/(4*π*(d-1))
         if Tw == 0 
           indx = round(Int64,d) #calculate index  
           s = 1
+          h[indx] += s*A
         else
           indx = maximum([ceil(Int64,d.-Tw/2),1]):minimum([floor(Int64,d.+Tw/2),Nt])
           # create time window
           s = (1 .+cos.(2*π.*(indx.-d)./Tw)).*sinc.(Fc.*(indx.-d))./2
           # compute filtered impulse
+          h[indx] .+= s.*A
         end
-        A = prod(beta.^abs.([l-u,l,m-v,m,n-w,n]))/(4*π*(d-1))
-        h[indx] = h[indx] + s.*A
       end
     end
 
