@@ -43,9 +43,10 @@ P,  = rim(s,xs,xr,L,beta,Nt,Fs; N = (4,4,4), seed = seed)
 
 ## original image source method
 println("test with no frac delay")
-xs = (1., 1., 1.)
-xr = (2., 1.5, 1)
-h2, = rim(xs,xr,L,beta,Nt,Fs; Tw = 0, Fc = 0., N = (2,2,2))
+xs = (2., 1.5, 1.)      # Source position
+xr = (1., 2.,  2.)   # Receiver position
+h2, = rim(xs,xr,L,beta,Nt,Fs; Tw = 0, Fc = 0., N = (4,4,4), seed = seed)
+@time h2, = rim(xs,xr,L,beta,Nt,Fs; Tw = 0, Fc = 0., N = (4,4,4), seed = seed)
 
 println("test line of sight")
 for i = 1:10
@@ -56,13 +57,10 @@ for i = 1:10
     @test argmax(h)*1/Fs - norm(xr .- xs)/343 < 1e-4
 end
 
-println("testing errors")
+# testing errors
 @test_throws ErrorException rim(xs, (1,1,1.1), (1,1,1), beta, Nt,Fs)
 @test_throws ErrorException rim(xs, (1,1, -1), (1,1,1), beta, Nt,Fs)
 @test_throws ErrorException rim((1,1,1.1), xs,  (1,1,1), beta, Nt,Fs)
 @test_throws ErrorException rim((1,1, -1), xs,  (1,1,1), beta, Nt,Fs)
 @test_throws ErrorException rim(xs, xr, (1,1,1), beta, Nt,Fs; N = (-1,4,4))
 @test_throws ErrorException rim(xr, xs,  (1,1,1), -0.1, Nt,Fs)
-
-
-

@@ -1,5 +1,5 @@
 using RIM
-using Test
+using Test, InteractiveUtils
 using LinearAlgebra
 using DSP
 using DelimitedFiles, Random
@@ -9,7 +9,6 @@ using DelimitedFiles, Random
     @testset "Image source method" begin 
         include("test_ism.jl")
     end
-
     @testset "equivalence with MATLAB" begin 
         include("test_julia_vs_matlab.jl")
     end
