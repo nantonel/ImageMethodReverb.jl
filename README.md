@@ -1,5 +1,8 @@
 # RIM
 
+[![Build status](https://github.com/nantonel/RIM.jl/workflows/CI/badge.svg)](https://github.com/nantonel/RIM.jl/actions?query=workflow%3ACI)
+[![codecov.io](http://codecov.io/github/nantonel/RIM.jl/coverage.svg?branch=master)](http://codecov.io/github/nantonel/RIM.jl?branch=master)
+
 Acoustic Room Impulse Response (RIR) generator using the Randomized Image Method (RIM) for rectangular geometries.
 
 ## Installation
