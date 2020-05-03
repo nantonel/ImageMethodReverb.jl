@@ -1,5 +1,5 @@
 using RIM
-using Test, InteractiveUtils
+using Test
 using LinearAlgebra
 using DSP
 using DelimitedFiles, Random
