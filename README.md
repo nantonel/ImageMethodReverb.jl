@@ -98,18 +98,10 @@ Randomized Image Source Method
 
 ## Other languages implementations
 
-A single channel MATLAB implementation of the RIM can be found in:
-[http://www.desena.org/sweep/](http://www.desena.org/sweep/)
-
-A multi-channel MATLAB version can be found in this repository in the [src/MATLAB folder](https://github.com/nantonel/RIM.jl/tree/master/src/MATLAB). Notice that the Julia version outperforms both implementations in terms of speed.
+A MATLAB implementation of the RIM can be found [here](https://github.com/enzodesena/rim).
 
 ## References
 
 1. [E. De Sena, N. Antonello, M. Moonen, and T. van Waterschoot, "On the Modeling of
 Rectangular Geometries in Room Acoustic Simulations", IEEE Transactions of Audio, Speech
 Language Processing, vol. 21, no. 4, April 2015.](http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=7045580)
-
-
-## Credits
-
-RIM.jl is developed by [Niccolò Antonello](http://homes.esat.kuleuven.be/~nantonel/) at [KU Leuven, ESAT/Stadius](https://www.esat.kuleuven.be/stadius/).
