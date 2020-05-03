@@ -13,7 +13,7 @@ To install the package, hit `]` from the Julia command line to enter the package
 pkg> add https://github.com/nantonel/RIM.jl.git
 ```
 
-## Usage 
+## Tutorial
 
 Import the package by typing `using RIM` and specify properties of 
 the room of interest:
@@ -64,35 +64,7 @@ and type:
 p, = rim(s,xs,[(1,1,1),(1,1.5,1)],L,T60,Nt,Fs)
 ```
 
-## Method signature
-
-`h, seed = rim([s,] xs, xr, L, T60, Nt, Fs)`
-
-Randomized Image Source Method
-
-#### Arguments: 
-
-* `s`   : (Optional) Source signals
-* `xs`  : Source position in meters (must be a Tuple)
-* `xr`  : Microphone position in meters (must be a `Tuple` or a `Vector{Tuple}` for mic array)
-* `Nt`  : Time samples
-* `L`   : 3 element `Tuple` containing dimensions of the room 
-* `beta`/`T60` : 6 element `Tuple` containing reflection coefficients of walls/reverberation time
-* `Nt`  : length of the RIR
-* `Fs`  : sampling frequency
-
-#### Keyword Arguments:
-
-* `c = 343`    : speed of sound 
-* `Rd = 1e-2`  : random displacement (in meters)
-* `N = (0,0,0)`: 3 element `Tuple` representing order of reflection when `N == (0;0;0)` full order is computed.
-* `Tw = 20`    : taps of fractional delay filter
-* `Fc = 0.9`   : cut-off frequency of fractional delay filter
-
-
-#### Outputs: 
-* `h`: vector or matrix where each column is an impulse response or the sound pressure if `s` was specified corresponding to the microphone positions `xr`
-* `seed`: randomization seed to preserve spatial properties when other RIR at different position are needed
+Type `?rim` for more details.
 
 
 ## Other languages implementations
