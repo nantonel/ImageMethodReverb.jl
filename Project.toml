@@ -1,7 +1,7 @@
 name = "ImageMethodReverb"
 uuid = "867a2677-d0be-406c-9fc2-92fafbd54ad6"
 authors = ["Niccolo Antonello"]
-version = "0.2.0"
+version = "1.0.0"
 
 [deps]
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
@@ -9,8 +9,8 @@ Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 DSP = "717857b8-e6f2-59f4-9121-6e50c889abd2"
 
 [compat]
-DSP = "≥ 0.5.1"
-julia = "≥ 1.0.0"
+julia = "1.0.0"
+DSP = "0.5.0"
 
 [extras]
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
