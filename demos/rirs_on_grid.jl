@@ -13,7 +13,7 @@ FWO Postdoctoral Fellow, KU Leuven ESAT-STADIUS
 """
 
 
-using RIM, Random, Plots, LinearAlgebra, NPZ
+using ImageMethodReverb, Random, Plots, LinearAlgebra, NPZ
 Fs = 16000                          # sampling frequency
 
 #-------------------------

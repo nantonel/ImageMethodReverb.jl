@@ -1,6 +1,6 @@
 __precompile__()
 
-module RIM
+module ImageMethodReverb
 
 using DSP, Random, LinearAlgebra 
 

@@ -9,7 +9,7 @@ xs = (2., 1.5, 1.)      # Source position
 xr = (1., 2.,  2.)   # Receiver position
 
 T60 = 0.1           # Reverberation Time
-beta = RIM.revTime2beta(L, T60, c)
+beta = ImageMethodReverb.revTime2beta(L, T60, c)
 Tw = 20              # samples of Low pass filter 
 Fc = 0.9             # cut-off frequency
 

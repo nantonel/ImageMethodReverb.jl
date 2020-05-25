@@ -1,10 +1,10 @@
-using RIM
+using ImageMethodReverb
 using Test
 using LinearAlgebra
 using DSP
 using DelimitedFiles, Random
 
-@testset "RIM" begin
+@testset "ImageMethodReverb" begin
 
     @testset "Image source method" begin 
         include("test_ism.jl")

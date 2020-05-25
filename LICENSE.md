@@ -1,4 +1,4 @@
-The RIM.jl package is licensed under the MIT "Expat" License:
+The ImageMethodReverb.jl package is licensed under the MIT "Expat" License:
 
 > Copyright (c) 2015: Niccolò Antonello.
 >

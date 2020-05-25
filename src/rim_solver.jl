@@ -200,7 +200,7 @@ function rim(xs::Union{ NTuple{3,Number}, Vector{NTuple{3, Number}} },
              c::Number = 343,
              kwargs...)
 
-    beta = RIM.revTime2beta(L, T60, c)
+    beta = ImageMethodReverb.revTime2beta(L, T60, c)
     return rim(xs, xr, L, beta, args...; kwargs...)
 
 end

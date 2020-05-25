@@ -1,4 +1,4 @@
-using RIM, Random
+using ImageMethodReverb, Random
 Fs = 8e3                        # sampling frequency
 L = Lx, Ly, Lz =  4.,5.,3.      # room dimensions in meters 
 T60 = 0.7                       # reverberation time
@@ -15,27 +15,12 @@ Nt = round(Int,Fs/2)          #time samples (1/5 sec)
 h, = rim(xs,xr,L,T60,Nt,Fs)
 t = range(0; length = Nt, step = 1/Fs )
 
-using PyPlot
-figure()
-plot(t,h)
-xlabel("Time")
-ylabel("RIR")
-
 # more mics
 h, = rim(xs,[(1,1,1),(1,2,1)],L,T60,Nt,Fs)
-
-using PyPlot
-figure()
-subplot(2,1,1)
-plot(t,h[:,1])
-xlabel("Time")
-ylabel("RIR mic (1,1,1)")
-
-subplot(2,1,2)
-plot(t,h[:,2])
-xlabel("Time")
-ylabel("RIR mic (1,2,1)")
 
 #with source signal
 s = randn(Nt)   #src signal 
 p, = rim(s,xs,[(1,1,1),(1,1.5,1)],L,T60,Nt,Fs)
+
+using Plots
+p = plot(t,h, xlabel="Time", ylabel="Sound Pressure")

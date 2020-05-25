@@ -1,24 +1,25 @@
-# RIM
+# Image method
 
-[![Build status](https://github.com/nantonel/RIM.jl/workflows/CI/badge.svg)](https://github.com/nantonel/RIM.jl/actions?query=workflow%3ACI)
-[![codecov.io](http://codecov.io/github/nantonel/RIM.jl/coverage.svg?branch=master)](http://codecov.io/github/nantonel/RIM.jl?branch=master)
+[![Build status](https://github.com/nantonel/ImageMethodReverb.jl/workflows/CI/badge.svg)](https://github.com/nantonel/ImageMethodReverb.jl/actions?query=workflow%3ACI)
+[![codecov.io](http://codecov.io/github/nantonel/ImageMethodReverb.jl/coverage.svg?branch=master)](http://codecov.io/github/nantonel/ImageMethodReverb.jl?branch=master)
 
-Acoustic Room Impulse Response (RIR) generator using the Randomized Image Method (RIM) for rectangular geometries.
+Acoustic Room Impulse Response (RIR) generator using the (Randomized) Image Method for rectangular rooms.
+Useful to add reverberation to audio signals.
 
 ## Installation
 
 To install the package, hit `]` from the Julia command line to enter the package manager, then
 
 ```julia
-pkg> add https://github.com/nantonel/RIM.jl.git
+pkg> add https://github.com/nantonel/ImageMethodReverb.jl.git
 ```
 
 ## Tutorial
 
-Import the package by typing `using RIM` and specify properties of 
+Import the package by typing `using ImageMethodReverb` and specify properties of 
 the room of interest:
 ```julia
-using RIM, Random
+using ImageMethodReverb, Random
 Fs = 8e3          # sampling frequency
 L = 4.,5.,3.      # room dimensions in meters 
 T60 = 0.7         # reverberation time
@@ -64,15 +65,15 @@ and type:
 p, = rim(s,xs,[(1,1,1),(1,1.5,1)],L,T60,Nt,Fs)
 ```
 
-Type `?rim` for more details.
-
+Type `?rim` for more details. By default the randomized image method from [1] is used. The original image method proposed in [2] can be reproduced as well by turining off the randomization and fractional delays.
 
 ## Other languages implementations
 
-A MATLAB implementation of the RIM can be found [here](https://github.com/enzodesena/rim).
+A MATLAB implementation of the Randomized Image Method can be found [here](https://github.com/enzodesena/rim).
 
 ## References
 
-1. [E. De Sena, N. Antonello, M. Moonen, and T. van Waterschoot, "On the Modeling of
+* [1] [E. De Sena, N. Antonello, M. Moonen, and T. van Waterschoot, "On the Modeling of
 Rectangular Geometries in Room Acoustic Simulations", IEEE Transactions of Audio, Speech
-Language Processing, vol. 21, no. 4, April 2015.](http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=7045580)
+Language Processing, vol. 21, no. 4, 2015.](http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=7045580)
+* [2] Allen, Jont B., and David A. Berkley. "Image method for efficiently simulating small‐room acoustics." The Journal of the Acoustical Society of America vol. 65 no. 4, 1979.
