@@ -4,7 +4,7 @@
 [![codecov.io](http://codecov.io/github/nantonel/ImageMethodReverb.jl/coverage.svg?branch=master)](http://codecov.io/github/nantonel/ImageMethodReverb.jl?branch=master)
 
 Acoustic Room Impulse Response (RIR) generator using the (Randomized) Image Method for rectangular rooms.
-Useful to add reverberation to audio signals.
+Can be used to make audio signals reverberant.
 
 ## Installation
 
