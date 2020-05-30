@@ -11,7 +11,7 @@ Can be used to make audio signals reverberant.
 To install the package, hit `]` from the Julia command line to enter the package manager, then
 
 ```julia
-pkg> add https://github.com/nantonel/ImageMethodReverb.jl.git
+pkg> add ImageMethodReverb
 ```
 
 ## Tutorial
