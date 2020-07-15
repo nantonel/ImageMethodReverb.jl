@@ -1,5 +1,6 @@
 # Image Method Reverb
 
+[![DOI](https://zenodo.org/badge/31613348.svg)](https://zenodo.org/badge/latestdoi/31613348)
 [![Build status](https://github.com/nantonel/ImageMethodReverb.jl/workflows/CI/badge.svg)](https://github.com/nantonel/ImageMethodReverb.jl/actions?query=workflow%3ACI)
 [![codecov.io](http://codecov.io/github/nantonel/ImageMethodReverb.jl/coverage.svg?branch=master)](http://codecov.io/github/nantonel/ImageMethodReverb.jl?branch=master)
 
