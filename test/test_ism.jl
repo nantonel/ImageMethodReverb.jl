@@ -42,19 +42,18 @@ P,  = rim(s,xs,xr,L,beta,Nt,Fs; N = (4,4,4), seed = seed)
 @test norm(P[:,1]-p) < 1e-8
 
 ## original image source method
-println("test with no frac delay")
+println("test with no fractional delay")
 xs = (2., 1.5, 1.)      # Source position
 xr = (1., 2.,  2.)   # Receiver position
 h2, = rim(xs,xr,L,beta,Nt,Fs; Tw = 0, Fc = 0., N = (4,4,4), seed = seed)
 @time h2, = rim(xs,xr,L,beta,Nt,Fs; Tw = 0, Fc = 0., N = (4,4,4), seed = seed)
 
 println("test line of sight")
+xs = (1., 1., 1.)
 for i = 1:10
-    d = (0.5 .*randn(3)...,)
-    xs = (1., 1., 1.)
-    xr = xs.+d
-    h, = rim(xs, xr, L, 0.001, Nt,Fs; Rd = 1e-1, N = (0,0,0))
-    @test argmax(h)*1/Fs - norm(xr .- xs)/343 < 1e-4
+    d = (0.5 .*randn(3)...,) # dandom dispacement
+    h_rand, = rim(xs, xs .+ d, L, 0.001, Nt,Fs; Rd = 1e-1, N = (0,0,0))
+    @test argmax(h_rand)*1/Fs - norm(xr .- xs)/343 < 1e-4
 end
 
 # testing errors
