@@ -13,8 +13,7 @@ Tw = 40            # samples of Low pass filter
 Fc = 0.9           # cut-off frequency
 
 # generate IR with randomization
-@time h, = rim(xs,xr,L,beta,Nt,Fs; Tw = Tw, Fc = Fc, Rd = Rd)
+h, = rim(xs,xr,L,beta,Nt,Fs; Tw = Tw, Fc = Fc, Rd = Rd)
 
 hm = readdlm("h.txt")
 @test norm(hm-h)<1e-8
-println("matlab reference test passed")
