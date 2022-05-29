@@ -41,9 +41,14 @@ for i = 1:10
 end
 
 # testing errors
-@test_throws ErrorException rim(xs, (1,1,1.1), (1,1,1), beta, Nt,Fs)
-@test_throws ErrorException rim(xs, (1,1, -1), (1,1,1), beta, Nt,Fs)
-@test_throws ErrorException rim((1,1,1.1), xs,  (1,1,1), beta, Nt,Fs)
-@test_throws ErrorException rim((1,1, -1), xs,  (1,1,1), beta, Nt,Fs)
-@test_throws ErrorException rim(xs, xr, (1,1,1), beta, Nt,Fs; N = (-1,4,4))
-@test_throws ErrorException rim(xr, xs,  (1,1,1), -0.1, Nt,Fs)
+L, xr, xs = (1,1,1), (0.5,0.5,0.5),(0.7,0.7,0.7)
+@test_throws ErrorException rim((0.1,), xr, L, beta, Nt,Fs)
+@test_throws ErrorException rim((1.1,0,0), xr, L, beta, Nt,Fs)
+@test_throws ErrorException rim(xs,(0.1,), L, beta, Nt,Fs)
+@test_throws ErrorException rim(xs,(1.1,0,0), L, beta, Nt,Fs)
+@test_throws ErrorException rim(xs,xr,(0,0), beta, Nt,Fs)
+@test_throws ErrorException rim(xs,xr,L, beta, Nt,Fs; N=(-1,1,1))
+@test_throws ErrorException rim(xs,xr,L, beta, Nt,Fs; N=(1,1))
+@test_throws ErrorException rim(xs,xr,L, beta, Nt,Fs; N=(1,1))
+@test_throws ErrorException rim(xs,xr,L, beta, Nt,Fs; N=(1.5,1,1))
+@test_throws ErrorException rim(xs,xr,L, (1,1), Nt,Fs)

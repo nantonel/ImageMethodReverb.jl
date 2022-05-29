@@ -51,6 +51,9 @@ function rim(xs,
   if length(L) != 3
     throw(ErrorException("length(L) must be equal to 3"))
   end
+  if length(N) != 3
+    throw(ErrorException("length(L) must be equal to 3"))
+  end
 
   if any( xs .> L ) || any( xs .<  0 ) 
     throw(ErrorException("xs outside of room"))
@@ -61,7 +64,7 @@ function rim(xs,
   if any(N .< 0 )  
     throw(ErrorException("N should be positive"))
   end
-  if (typeof(N[1]) <: Int) == false
+  if any( (typeof(n) <: Int) == false for n in N  )
     throw(ErrorException("N should be integers only"))
   end
   if length(beta) == 1 # T60
